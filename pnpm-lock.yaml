@@ -26,6 +26,9 @@ importers:
       bulma:
         specifier: ^0.9.4
         version: 0.9.4
+      firebase-utils:
+        specifier: github:brachkow/firebase-utils
+        version: github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554
       vue:
         specifier: ^3.3.11
         version: 3.4.5(typescript@5.3.3)
@@ -104,7 +107,20 @@ importers:
         specifier: ^10.7.1
         version: 10.7.1
 
-  types: {}
+  types:
+    dependencies:
+      firebase-utils:
+        specifier: github:brachkow/firebase-utils
+        version: github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554
+
+  utils:
+    dependencies:
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
+      nanoid:
+        specifier: ^5.0.4
+        version: 5.0.4
 
 packages:
 
@@ -2659,6 +2675,10 @@ packages:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
     dev: true
 
+  /dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+    dev: false
+
   /de-indent@1.0.2:
     resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
     dev: true
@@ -4538,6 +4558,12 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanoid@5.0.4:
+    resolution: {integrity: sha512-vAjmBf13gsmhXSgBrtIclinISzFFy22WwCYoyilZlsrRXNIHSwgFQ1bEdjRwMT3aoadeIF6HMuDRlOxzfXV8ig==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -6555,3 +6581,15 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554:
+    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554}
+    name: firebase-utils
+    version: 0.0.0
+    dependencies:
+      dayjs: 1.11.10
+      firebase: 10.7.1
+      nanoid: 5.0.4
+    transitivePeerDependencies:
+      - '@react-native-async-storage/async-storage'
+    dev: false
