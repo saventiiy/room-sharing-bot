@@ -4,7 +4,13 @@ import { Profile } from '../types';
 
 const PROFILE_COLLECTION = 'profiles';
 
-export const addProfile = async (userId: string, profile: Profile) => {
+export const addProfile = async ({
+  userId,
+  profile,
+}: {
+  userId: string;
+  profile: Profile;
+}) => {
   await setDoc(doc(db, PROFILE_COLLECTION, userId), profile);
 };
 
