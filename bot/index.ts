@@ -3,9 +3,10 @@ import { Context, Markup, Telegraf } from 'telegraf';
 
 const hasProfile = (id: number) => true;
 
-const WEBAPP_BASE = 'https://brachkow.com';
+const BOT_TOKEN = String(process.env.BOT_TOKEN);
+const WEB_APP_URL = String(process.env.WEB_APP_URL);
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Telegraf(BOT_TOKEN);
 
 const getMainMenu = (ctx: Context) =>
   Markup.keyboard(
@@ -14,17 +15,17 @@ const getMainMenu = (ctx: Context) =>
           [
             Markup.button.webApp(
               'Профиль',
-              `${WEBAPP_BASE}/profiles/${ctx.from.id}`,
+              `${WEB_APP_URL}/profiles/${ctx.from.id}`,
             ),
             Markup.button.webApp(
               'Объявление',
-              `${WEBAPP_BASE}/listings/${ctx.from.id}`,
+              `${WEB_APP_URL}/listings/${ctx.from.id}`,
             ),
           ],
           [
             Markup.button.webApp(
               'Мэтчи',
-              `${WEBAPP_BASE}/matches/${ctx.from.id}`,
+              `${WEB_APP_URL}/matches/${ctx.from.id}`,
             ),
           ],
         ]
