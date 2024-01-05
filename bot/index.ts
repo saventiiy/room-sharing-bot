@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { Context, Markup, Telegraf } from 'telegraf';
-
-const hasProfile = (id: number) => true;
+import { hasProfile } from '../sdk';
 
 const BOT_TOKEN = String(process.env.BOT_TOKEN);
 const WEB_APP_URL = String(process.env.WEB_APP_URL);
@@ -33,12 +32,20 @@ const getMainMenu = (ctx: Context) =>
   ).resize();
 
 bot.start(async (ctx) => {
-  (await hasProfile(ctx.from.id))
+  (await hasProfile(String(ctx.from.id)))
     ? ctx.reply(
         'Здраствуйте! У вас уже есть профиль, нажмите "Профиль" чтобы посмотреть его.',
         getMainMenu(ctx),
       )
-    : ctx.reply('Welcome');
+    : ctx.reply(
+        'Здраствуйте! У вас еще нет профиля, нажмите "Профиль" чтобы создать его.',
+        Markup.inlineKeyboard([
+          Markup.button.webApp(
+            'Создать профиль',
+            `${WEB_APP_URL}/profiles/${ctx.from.id}`,
+          ),
+        ]),
+      );
 });
 
 bot.on('message', (ctx) => {
