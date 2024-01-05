@@ -1,16 +1,10 @@
 <script lang="ts" setup>
   import { init } from '@tma.js/sdk';
   import { addProfile } from '@/../../sdk';
-  import { Profile } from '@/../../types';
+  import { Profile, Gender } from '@/../../types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
-
-  enum Gender {
-    Male = 'Male',
-    Female = 'Female',
-    Other = 'Other',
-  }
 
   const name = ref('');
   const age = ref(18);
