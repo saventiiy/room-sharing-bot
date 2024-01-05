@@ -1,7 +1,10 @@
 <script lang="ts" setup>
   import { init } from '@tma.js/sdk';
   import { addProfile } from '@/../../sdk';
+  import { Profile } from '@/../../types';
   import { useTextareaAutosize } from '@vueuse/core';
+  import { getTimestamp } from 'firebase-utils';
+  import dayjs from 'dayjs';
 
   enum Gender {
     Male = 'Male',
@@ -14,8 +17,27 @@
   const gender = ref(Gender.Male);
   const { textarea, input: bio } = useTextareaAutosize();
 
+  const isValid = computed(() => {
+    return !!(
+      name.value.length > 0 &&
+      bio.value &&
+      bio.value.length > 0 &&
+      age.value > 0 &&
+      gender.value
+    );
+  });
+
   const handleSave = async () => {
-    await addProfile({ userId: 'foobar', name: name.value });
+    await addProfile({
+      userId: 'foobar',
+      profile: new Profile({
+        name: name.value,
+        gender: gender.value,
+        photos: [],
+        bio: bio.value,
+        dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+      }),
+    });
   };
 
   onMounted(() => {
@@ -132,4 +154,7 @@
       Вот так будет выглядеть ваш профиль для соискателей
     </div>
   </div>
+  <button class="button" :disabled="!isValid" @click="handleSave">
+    Сохранить
+  </button>
 </template>

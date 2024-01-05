@@ -26,6 +26,9 @@ importers:
       bulma:
         specifier: ^0.9.4
         version: 0.9.4
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       firebase-utils:
         specifier: github:brachkow/firebase-utils
         version: github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554
