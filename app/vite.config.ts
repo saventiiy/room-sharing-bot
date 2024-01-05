@@ -22,7 +22,7 @@ export default defineConfig({
     vue(),
     Components({
       dts: true,
-      dirs: ['src/components', 'src/layouts', 'src/views'],
+      dirs: ['src/components', 'src/layouts'],
     }),
     AutoImport({
       dts: true,
