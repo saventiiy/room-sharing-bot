@@ -21,19 +21,6 @@
     );
   });
 
-  const handleSave = async () => {
-    await addProfile({
-      userId: 'foobar',
-      profile: new Profile({
-        name: name.value,
-        gender: gender.value,
-        photos: [],
-        bio: bio.value,
-        dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-      }),
-    });
-  };
-
   onMounted(() => {
     try {
       const { mainButton, postEvent } = init();
@@ -46,7 +33,18 @@
 
       mainButton.on('click', async () => {
         try {
-          await handleSave();
+          const profile = await addProfile({
+            userId: 'foobar',
+            profile: new Profile({
+              name: name.value,
+              gender: gender.value,
+              photos: [],
+              bio: bio.value,
+              dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+            }),
+          });
+
+          postEvent('web_app_data_send', { data: JSON.stringify(profile) });
           postEvent('web_app_close');
         } catch (e) {
           console.error(e);

@@ -23,6 +23,7 @@ bot.use(session());
 bot.use(stage.middleware());
 
 bot.start(async (ctx) => {
+  console.log('Bot started');
   if (await hasProfile(String(ctx.from.id))) {
     ctx.scene.enter(RETURNING_USER_ONBOARDING_SCENE);
   } else {

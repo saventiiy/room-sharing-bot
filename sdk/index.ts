@@ -12,6 +12,8 @@ export const addProfile = async ({
   profile: Profile;
 }) => {
   await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
+
+  return profile;
 };
 
 export const hasProfile = async (userId: string) => {
