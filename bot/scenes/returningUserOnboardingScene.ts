@@ -1,5 +1,5 @@
 import { Scenes } from 'telegraf';
-import { mainMenu } from '../menus/mainMenu';
+import { MAIN_SCENE } from './mainScene';
 
 const RETURNING_USER_ONBOARDING_SCENE = 'returningUserOnboarding';
 
@@ -11,8 +11,8 @@ returningUserOnboardingScene.enter((ctx) => {
   console.log(`Entering ${RETURNING_USER_ONBOARDING_SCENE}`);
   ctx.reply(
     'Здраствуйте! У вас уже есть профиль, нажмите "Профиль" чтобы посмотреть его.',
-    mainMenu(ctx),
   );
+  ctx.scene.enter(MAIN_SCENE);
 });
 
 export { returningUserOnboardingScene, RETURNING_USER_ONBOARDING_SCENE };

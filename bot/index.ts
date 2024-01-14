@@ -9,15 +9,15 @@ import {
   newUserOnboardingScene,
   NEW_USER_ONBOARDING_SCENE,
 } from './scenes/newUserOnboardingScene';
+import { mainScene } from './scenes/mainScene';
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 
-const stage = new Scenes.Stage<Scenes.SceneContext>(
-  [newUserOnboardingScene, returningUserOnboardingScene],
-  {
-    ttl: 10,
-  },
-);
+const stage = new Scenes.Stage<Scenes.SceneContext>([
+  mainScene,
+  newUserOnboardingScene,
+  returningUserOnboardingScene,
+]);
 
 bot.use(session());
 bot.use(stage.middleware());
@@ -31,7 +31,7 @@ bot.start(async (ctx) => {
 });
 
 bot.on('message', (ctx) => {
-  ctx.reply('pong');
+  console.log('pong:', ctx.message);
 });
 
 bot.launch();

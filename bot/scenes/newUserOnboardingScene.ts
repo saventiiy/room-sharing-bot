@@ -7,12 +7,17 @@ const newUserOnboardingScene = new Scenes.BaseScene<Scenes.SceneContext>(
   'newUserOnboarding',
 );
 
-newUserOnboardingScene.enter((ctx) => {
-  console.log('Entering newUserOnboardingScene');
+const defaultReply = (ctx: Scenes.SceneContext) => {
   ctx.reply(
-    'Здраствуйте! У вас еще нет профиля, нажмите "Профиль" чтобы создать его.',
+    'Здраствуйте! У вас еще нет профиля, нажмите "Создать профиль" чтобы создать его.',
     createProfileMenu(ctx),
   );
+};
+
+newUserOnboardingScene.enter((ctx) => {
+  console.log('Entering newUserOnboardingScene');
+  defaultReply(ctx);
 });
+newUserOnboardingScene.on('message', defaultReply);
 
 export { newUserOnboardingScene, NEW_USER_ONBOARDING_SCENE };
