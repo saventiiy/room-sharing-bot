@@ -146,7 +146,4 @@
       Вот так будет выглядеть ваш профиль для соискателей
     </div>
   </div>
-  <button class="button" :disabled="!isValid" @click="handleSave">
-    Сохранить
-  </button>
 </template>
