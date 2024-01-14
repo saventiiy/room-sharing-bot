@@ -22,4 +22,6 @@ export const mainMenu = (ctx: Context) =>
           ],
         ]
       : [],
-  ).resize();
+  )
+    .oneTime()
+    .resize();
