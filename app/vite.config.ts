@@ -27,7 +27,15 @@ export default defineConfig({
     AutoImport({
       dts: true,
       eslintrc: { enabled: true },
-      imports: ['vue', 'vue-router', '@vueuse/core'],
+      imports: [
+        'vue',
+        'vue-router',
+        '@vueuse/core',
+        {
+          from: '@vueuse/router',
+          imports: ['useRouteParams', 'useRouteQuery', 'useRouteHash'],
+        },
+      ],
     }),
   ],
   resolve: {
