@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch ./index.ts",
-    "build": "tsc index.ts",
-    "start": "node index.js"
+    "dev": "tsx watch ./dist/index.ts",
+    "build": "tsc ./src/index.ts",
+    "start": "node ./src/index.js"
   },
   "keywords": [],
   "author": "",

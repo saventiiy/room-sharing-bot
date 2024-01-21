@@ -1,7 +1,7 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { createProfileMenu } from '../menus/createProfileMenu';
-import { Profile } from '../../types';
+import { Profile } from '../../../types';
 
 const NEW_USER_ONBOARDING_SCENE = 'newUserOnboarding';
 
