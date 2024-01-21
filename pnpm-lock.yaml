@@ -30,8 +30,8 @@ importers:
         specifier: ^1.11.10
         version: 1.11.10
       firebase-utils:
-        specifier: github:brachkow/firebase-utils
-        version: github.com/brachkow/firebase-utils/9cc7508c3b6dfa8bee2a728e5913abd21db0ce04
+        specifier: github:brachkow/firebase-utils#0.0.0
+        version: github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7
       vue:
         specifier: ^3.3.11
         version: 3.4.5(typescript@5.3.3)
@@ -116,8 +116,8 @@ importers:
         specifier: ^10.7.1
         version: 10.7.1
       firebase-utils:
-        specifier: github:brachkow/firebase-utils
-        version: github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554
+        specifier: github:brachkow/firebase-utils#0.0.0
+        version: github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7
 
   utils:
     dependencies:
@@ -6588,20 +6588,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/brachkow/firebase-utils/9cc7508c3b6dfa8bee2a728e5913abd21db0ce04:
-    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/9cc7508c3b6dfa8bee2a728e5913abd21db0ce04}
-    name: firebase-utils
-    version: 0.0.0
-    dependencies:
-      dayjs: 1.11.10
-      firebase: 10.7.1
-      nanoid: 5.0.4
-    transitivePeerDependencies:
-      - '@react-native-async-storage/async-storage'
-    dev: false
-
-  github.com/brachkow/firebase-utils/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554:
-    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/e9bbad4a3eda6ec5a0d5df1b9df69da386cae554}
+  github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7:
+    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/db39bbd9d86dc9ce576c44beb187528dd12d33c7}
     name: firebase-utils
     version: 0.0.0
     dependencies:
