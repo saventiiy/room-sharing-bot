@@ -28,10 +28,12 @@
     is_active: isValid.value,
   }));
 
+  const userId = useRouteParams<string>('userId');
+
   useMainButton(mainButtonOptions, async () => {
     try {
       const profile = await addProfile({
-        userId: 'foobar',
+        userId: userId.value,
         profile: new Profile({
           name: name.value,
           gender: gender.value,
