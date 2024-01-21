@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-  import { init } from '@tma.js/sdk';
+  import { postEvent } from '@tma.js/sdk';
   import { addProfile } from '@/../../sdk';
   import { Profile, Gender } from '@/../../types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
+  import { useMainButton } from '@/composables/useMainButton';
+  import { type MainButtonConfig } from '@/composables/useMainButton';
 
   const name = ref('');
   const age = ref(18);
@@ -21,37 +23,27 @@
     );
   });
 
-  onMounted(() => {
+  const mainButtonOptions = computed<MainButtonConfig>(() => ({
+    text: name.value,
+    is_active: isValid.value,
+  }));
+
+  useMainButton(mainButtonOptions, async () => {
     try {
-      const { mainButton, postEvent } = init();
-
-      mainButton
-        .enable()
-        .show()
-        .setBackgroundColor('#0000ff')
-        .setText('Сохранить');
-
-      mainButton.on('click', async () => {
-        try {
-          const profile = await addProfile({
-            userId: 'foobar',
-            profile: new Profile({
-              name: name.value,
-              gender: gender.value,
-              photos: [],
-              bio: bio.value,
-              dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-            }),
-          });
-
-          postEvent('web_app_data_send', { data: JSON.stringify(profile) });
-          postEvent('web_app_close');
-        } catch (e) {
-          console.error(e);
-        }
+      const profile = await addProfile({
+        userId: 'foobar',
+        profile: new Profile({
+          name: name.value,
+          gender: gender.value,
+          photos: [],
+          bio: bio.value,
+          dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+        }),
       });
+      postEvent('web_app_data_send', { data: JSON.stringify(profile) });
+      postEvent('web_app_close');
     } catch (e) {
-      console.warn(e);
+      console.error(e);
     }
   });
 </script>
