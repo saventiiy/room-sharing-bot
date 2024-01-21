@@ -30,8 +30,8 @@ importers:
         specifier: ^1.11.10
         version: 1.11.10
       firebase-utils:
-        specifier: github:brachkow/firebase-utils#0.0.0
-        version: github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7
+        specifier: github:brachkow/firebase-utils#0.1.1
+        version: github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad
       vue:
         specifier: ^3.3.11
         version: 3.4.5(typescript@5.3.3)
@@ -116,8 +116,8 @@ importers:
         specifier: ^10.7.1
         version: 10.7.1
       firebase-utils:
-        specifier: github:brachkow/firebase-utils#0.0.0
-        version: github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7
+        specifier: github:brachkow/firebase-utils#0.1.1
+        version: github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad
 
   utils:
     dependencies:
@@ -6588,10 +6588,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/brachkow/firebase-utils/db39bbd9d86dc9ce576c44beb187528dd12d33c7:
-    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/db39bbd9d86dc9ce576c44beb187528dd12d33c7}
+  github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad:
+    resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/e52f59228e3a7c3d17be7a6df10baa6de9852aad}
     name: firebase-utils
     version: 0.0.0
+    requiresBuild: true
     dependencies:
       dayjs: 1.11.10
       firebase: 10.7.1
