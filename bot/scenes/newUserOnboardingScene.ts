@@ -23,14 +23,8 @@ newUserOnboardingScene.enter((ctx) => {
 newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
   console.log('Got some web_app_data', ctx.webAppData.data.json());
   const profile: Profile = ctx.webAppData.data.json();
-  ctx.reply(`
-Ваш профиль:
-name: ${profile.name}
-dateofbirth: ${profile.dateofbirth}
-gender: ${profile.gender}
-photos: ${profile.photos}
-bio: ${profile.bio}
-  `);
+  ctx.reply(JSON.stringify(profile, null, 2));
+
   ctx.scene.enter('mainScene');
 });
 newUserOnboardingScene.on('message', defaultReply);
