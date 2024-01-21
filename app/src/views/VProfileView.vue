@@ -63,6 +63,7 @@
     </div>
   </section>
   <div class="container is-fluid">
+    <input type="file" />
     <div class="block">
       <div class="field">
         <label class="label">Имя</label>
