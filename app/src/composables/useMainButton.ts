@@ -16,14 +16,18 @@ export const useMainButton = (
   watch(
     () => config.value,
     () => {
-      postEvent(
-        'web_app_setup_main_button',
-        Object.assign(
-          {},
-          { is_visible: true, is_active: true },
-          { ...config.value },
-        ),
-      );
+      try {
+        postEvent(
+          'web_app_setup_main_button',
+          Object.assign(
+            {},
+            { is_visible: true, is_active: true },
+            { ...config.value },
+          ),
+        );
+      } catch (e) {
+        console.warn(e);
+      }
     },
     { immediate: true },
   );
