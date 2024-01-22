@@ -1,4 +1,5 @@
 import { Context, Markup } from 'telegraf';
+import { ReplyKeyboardMarkup } from 'telegraf/typings/core/types/typegram';
 
 export const createProfileMenu = (ctx: Context) => {
   return Markup.keyboard([
