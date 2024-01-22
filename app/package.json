@@ -19,6 +19,8 @@
     "bulma": "^0.9.4",
     "dayjs": "^1.11.10",
     "firebase-utils": "github:brachkow/firebase-utils#0.1.1",
+    "sdk": "link:../sdk",
+    "types": "link:../types",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },

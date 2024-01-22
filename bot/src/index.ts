@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Telegraf, Scenes, session } from 'telegraf';
-import { hasProfile } from '../../sdk';
+import { hasProfile } from 'sdk';
 import {
   returningUserOnboardingScene,
   RETURNING_USER_ONBOARDING_SCENE,
