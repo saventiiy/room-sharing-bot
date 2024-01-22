@@ -33,11 +33,11 @@ importers:
         specifier: github:brachkow/firebase-utils#0.1.1
         version: github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad
       sdk:
-        specifier: link:../sdk
-        version: link:../sdk
+        specifier: file:../sdk
+        version: file:sdk
       types:
-        specifier: link:../types
-        version: link:../types
+        specifier: file:../types
+        version: file:types
       vue:
         specifier: ^3.3.11
         version: 3.4.5(typescript@5.3.3)
@@ -100,14 +100,14 @@ importers:
         specifier: ^16.3.1
         version: 16.3.1
       sdk:
-        specifier: link:../sdk
-        version: link:../sdk
+        specifier: file:../sdk
+        version: file:sdk
       telegraf:
         specifier: ^4.15.3
         version: 4.15.3
       types:
-        specifier: link:../types
-        version: link:../types
+        specifier: file:../types
+        version: file:types
     devDependencies:
       '@types/node':
         specifier: ^20.10.6
@@ -122,8 +122,8 @@ importers:
         specifier: ^10.7.1
         version: 10.7.1
       types:
-        specifier: link:../types
-        version: link:../types
+        specifier: file:../types
+        version: file:types
 
   types:
     dependencies:
@@ -134,8 +134,8 @@ importers:
         specifier: github:brachkow/firebase-utils#0.1.1
         version: github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad
       utils:
-        specifier: link:../utils
-        version: link:../utils
+        specifier: file:../utils
+        version: file:utils
 
   utils:
     dependencies:
@@ -6609,6 +6609,35 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  file:sdk:
+    resolution: {directory: sdk, type: directory}
+    name: sdk
+    dependencies:
+      firebase: 10.7.1
+      types: file:types
+    transitivePeerDependencies:
+      - '@react-native-async-storage/async-storage'
+    dev: false
+
+  file:types:
+    resolution: {directory: types, type: directory}
+    name: types
+    dependencies:
+      firebase: 10.7.1
+      firebase-utils: github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad
+      utils: file:utils
+    transitivePeerDependencies:
+      - '@react-native-async-storage/async-storage'
+    dev: false
+
+  file:utils:
+    resolution: {directory: utils, type: directory}
+    name: utils
+    dependencies:
+      dayjs: 1.11.10
+      nanoid: 5.0.4
+    dev: false
 
   github.com/brachkow/firebase-utils/e52f59228e3a7c3d17be7a6df10baa6de9852aad:
     resolution: {tarball: https://codeload.github.com/brachkow/firebase-utils/tar.gz/e52f59228e3a7c3d17be7a6df10baa6de9852aad}

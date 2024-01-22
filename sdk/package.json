@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "firebase": "^10.7.1",
-    "types": "link:../types"
+    "types": "file:../types"
   }
 }
