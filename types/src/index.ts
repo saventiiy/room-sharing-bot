@@ -1,11 +1,16 @@
 import type { Timestamp } from 'firebase/firestore';
-import { getId } from 'utils';
-import { BaseDocument, getTimestamp } from 'firebase-utils';
+import { getId } from 'utils/src';
+import { BaseDocument, getTimestamp } from 'firebase-utils/src';
 
 export enum Gender {
   Male = 'Male',
   Female = 'Female',
   Other = 'Other',
+}
+
+export enum LookingFor {
+  Room = 'Room',
+  Flatmate = 'Flatmate',
 }
 
 export enum Districts {
@@ -32,6 +37,7 @@ export interface Profile extends BaseDocument {
   gender: Gender;
   photos: string[];
   bio: string;
+  lookingFor: LookingFor;
 }
 
 export class Profile extends BaseDocument implements Profile {
@@ -44,6 +50,7 @@ export class Profile extends BaseDocument implements Profile {
     gender,
     photos = [],
     bio,
+    lookingFor,
   }: {
     id?: string;
     createdAt?: Timestamp;
@@ -53,6 +60,7 @@ export class Profile extends BaseDocument implements Profile {
     gender: Gender;
     photos: string[];
     bio: string;
+    lookingFor: LookingFor;
   }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
@@ -60,6 +68,7 @@ export class Profile extends BaseDocument implements Profile {
     this.gender = gender;
     this.photos = photos;
     this.bio = bio;
+    this.lookingFor = lookingFor;
   }
 }
 
@@ -128,3 +137,4 @@ export class Roommate extends BaseDocument implements Roommate {
     this.likes = likes;
   }
 }
+

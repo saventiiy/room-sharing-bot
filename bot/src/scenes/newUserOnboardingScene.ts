@@ -1,7 +1,10 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { createProfileMenu } from '../menus/createProfileMenu';
-import { Profile } from 'types';
+import { LookingFor, Profile } from 'types/src';
+import { MAIN_SCENE } from './mainScene';
+import { NEW_ROOM_ONBOARDING_SCENE } from './newRoomOnboardingScene';
+
 
 const NEW_USER_ONBOARDING_SCENE = 'newUserOnboarding';
 
@@ -21,11 +24,17 @@ newUserOnboardingScene.enter((ctx) => {
   defaultReply(ctx);
 });
 newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
-  console.log('Got some web_app_data', ctx.webAppData?.data.json());
-  const profile: Profile | undefined = ctx.webAppData?.data.json();
+  console.log('Got some web_app_data', ctx.webAppData.data.json());
+  const profile: Profile = ctx.webAppData.data.json();
   ctx.reply(JSON.stringify(profile, null, 2));
-  ctx.scene.enter('mainScene');
+
+  if(profile.lookingFor == LookingFor.Flatmate){
+    ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
+  } else {
+    ctx.scene.enter(MAIN_SCENE);
+  }
 });
+
 newUserOnboardingScene.on('message', defaultReply);
 
 export { newUserOnboardingScene, NEW_USER_ONBOARDING_SCENE };
