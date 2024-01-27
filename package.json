@@ -1,8 +1,5 @@
 {
-  "name": "root",
-  "private": true,
-  "dependencies": {},
   "devDependencies": {
-    "lerna": "^8.0.1"
+    "turbo": "^1.11.3"
   }
 }

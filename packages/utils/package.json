@@ -1,0 +1,13 @@
+{
+  "name": "utils",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "nanoid": "^5.0.4"
+  },
+  "devDependencies": {
+    "typescript": "~5.3.0"
+  }
+}

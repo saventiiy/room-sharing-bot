@@ -1,7 +1,7 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { createProfileMenu } from '../menus/createProfileMenu';
-import { Profile } from '../../types';
+import { Profile } from 'types';
 
 const NEW_USER_ONBOARDING_SCENE = 'newUserOnboarding';
 
@@ -21,11 +21,11 @@ newUserOnboardingScene.enter((ctx) => {
   defaultReply(ctx);
 });
 newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
-  console.log('Got some web_app_data', ctx.webAppData.data.json());
-  const profile: Profile = ctx.webAppData.data.json();
+  console.log('Got some web_app_data', ctx.webAppData?.data.json());
+  const profile: Profile | undefined = ctx.webAppData?.data.json();
   ctx.reply(JSON.stringify(profile, null, 2));
 
-  ctx.scene.enter('mainScene');
+  profile && ctx.scene.enter('mainScene');
 });
 newUserOnboardingScene.on('message', defaultReply);
 
