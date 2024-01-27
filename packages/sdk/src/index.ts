@@ -1,6 +1,6 @@
 import { db } from './firebase';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
-import { Profile } from '../../types/src';
+import { Profile } from 'types';
 
 const PROFILE_COLLECTION = 'profiles';
 

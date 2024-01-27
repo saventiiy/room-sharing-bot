@@ -4,6 +4,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "types": "workspace:*",
     "firebase": "^10.7.1"
   },
   "devDependencies": {
