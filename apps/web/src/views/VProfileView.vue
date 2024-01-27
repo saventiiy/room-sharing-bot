@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
-  import { addProfile } from '@/../../sdk';
-  import { Profile, Gender } from '@/../../types';
+  import { addProfile } from 'sdk';
+  import { Profile, Gender } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';

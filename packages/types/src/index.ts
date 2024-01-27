@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import { getId } from '../utils';
+import { getId } from '../../utils';
 import { BaseDocument, getTimestamp } from 'firebase-utils';
 
 export enum Gender {
