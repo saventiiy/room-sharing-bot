@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist"
+    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
