@@ -7,4 +7,4 @@
 0. Для начала нужно установить зависимости. Для этого понадобится [pnpm](https://formulae.brew.sh/formula/pnpm). В корне монорепозитория нужно запустить `pnpm i`. Ещё понадобится turbo: `pnpm install turbo --global`.
 1. Для того чтобы прокинуть локальный интерфейс в телеграм понадобится возможность ходить на локалхост с https. Для того чтобы выписать сертифкат один раз и забыть нужно получить статический IP через [Tailscale](https://tailscale.com/) — зарегаться и включить. Затем по [гайду](https://web.dev/articles/how-to-use-local-https) выписать на полученный IP сертификаты и положить их в `app/` под названиями `https-key.pem` и `https-cerificate.pem`
 2. В папке `bot/` нужно сделать `cp .env.example .env` и заполнить `.env` значениями. `BOT_TOKEN` нужно получить создав тестового бота в [BotFather](t.me/botfather), а `WEB_APP_URL` заполнить `https://ВАШ_IP_В_TAILSCALE:1234`
-3. Можно запускать бота через `turbo dev`
+3. Можно запускать бота через `pnpm run dev`
