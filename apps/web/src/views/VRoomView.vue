@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-  import { postEvent } from '@tma.js/sdk';
-  import { Profile, Districts } from '../../../../packages/types/src';
+  import { Districts } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
-  import { getTimestamp } from 'firebase-utils';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
 

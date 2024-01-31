@@ -41,7 +41,7 @@
           gender: gender.value,
           photos: [],
           bio: bio.value,
-          dateofbirth: 123,
+          dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
           lookingFor: lookingFor.value 
         }),
       });

@@ -22,6 +22,7 @@ newUserOnboardingScene.enter((ctx) => {
   console.log('Entering newUserOnboardingScene');
   defaultReply(ctx);
 });
+
 newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
   console.log('Got some web_app_data', ctx.webAppData?.data.json());
   const profile: Profile | undefined = ctx.webAppData?.data.json();
