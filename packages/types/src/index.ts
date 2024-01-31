@@ -8,6 +8,11 @@ export enum Gender {
   Other = 'Other',
 }
 
+export enum LookingFor {
+  Room = 'Room',
+  Flatmate = 'Flatmate',
+}
+
 export enum Districts {
   Bemowo = 'Bemowo',
   Bialoleka = 'Bialoleka',
@@ -32,6 +37,7 @@ export interface Profile extends BaseDocument {
   gender: Gender;
   photos: string[];
   bio: string;
+  lookingFor: LookingFor;
 }
 
 export class Profile extends BaseDocument implements Profile {
@@ -44,6 +50,7 @@ export class Profile extends BaseDocument implements Profile {
     gender,
     photos = [],
     bio,
+    lookingFor,
   }: {
     id?: string;
     createdAt?: Timestamp;
@@ -53,6 +60,7 @@ export class Profile extends BaseDocument implements Profile {
     gender: Gender;
     photos: string[];
     bio: string;
+    lookingFor: LookingFor;
   }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
@@ -60,6 +68,7 @@ export class Profile extends BaseDocument implements Profile {
     this.gender = gender;
     this.photos = photos;
     this.bio = bio;
+    this.lookingFor = lookingFor;
   }
 }
 

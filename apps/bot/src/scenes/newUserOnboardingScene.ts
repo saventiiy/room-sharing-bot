@@ -1,7 +1,10 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { createProfileMenu } from '../menus/createProfileMenu';
-import { Profile } from 'types';
+import { LookingFor, Profile } from '../../../../packages/types/src';
+import { NEW_ROOM_ONBOARDING_SCENE } from './newRoomOnboardingScene';
+import { MAIN_SCENE } from './mainScene';
+
 
 const NEW_USER_ONBOARDING_SCENE = 'newUserOnboarding';
 
@@ -25,8 +28,13 @@ newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
   const profile: Profile | undefined = ctx.webAppData?.data.json();
   ctx.reply(JSON.stringify(profile, null, 2));
 
-  profile && ctx.scene.enter('mainScene');
+  if(profile != undefined && profile.lookingFor == LookingFor.Flatmate){
+    ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
+  } else {
+    ctx.scene.enter(MAIN_SCENE);
+  }
 });
+
 newUserOnboardingScene.on('message', defaultReply);
 
 export { newUserOnboardingScene, NEW_USER_ONBOARDING_SCENE };

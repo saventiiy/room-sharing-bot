@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
   import { addProfile } from 'sdk';
-  import { Profile, Gender } from 'types';
+  import { Profile, Gender, LookingFor } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
@@ -11,6 +11,7 @@
   const name = ref('');
   const age = ref(18);
   const gender = ref(Gender.Male);
+  const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
 
   const isValid = computed(() => {
@@ -19,7 +20,8 @@
       bio.value &&
       bio.value.length > 0 &&
       age.value > 0 &&
-      gender.value
+      gender.value &&
+      lookingFor.value
     );
   });
 
@@ -39,7 +41,8 @@
           gender: gender.value,
           photos: [],
           bio: bio.value,
-          dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+          dateofbirth: 123,
+          lookingFor: lookingFor.value 
         }),
       });
       postEvent('web_app_data_send', { data: JSON.stringify(profile) });
@@ -96,6 +99,27 @@
               :value="Gender.Other"
               name="answer" />
             Другой
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Ищу</label>
+        <div class="control">
+          <label class="radio">
+            <input
+              type="radio"
+              v-model="lookingFor"
+              :value="LookingFor.Room"
+              name="lookingForAnswer" />
+            Комнату
+          </label>
+          <label class="radio">
+            <input
+              type="radio"
+              v-model="lookingFor"
+              :value="LookingFor.Flatmate"
+              name="lookingForAnswer" />
+            Соседа
           </label>
         </div>
       </div>

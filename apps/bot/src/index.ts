@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Telegraf, Scenes, session } from 'telegraf';
-import { hasProfile } from 'sdk';
+import { hasProfile } from '../../../packages/sdk/src';
 import {
   returningUserOnboardingScene,
   RETURNING_USER_ONBOARDING_SCENE,
@@ -10,12 +10,14 @@ import {
   NEW_USER_ONBOARDING_SCENE,
 } from './scenes/newUserOnboardingScene';
 import { mainScene } from './scenes/mainScene';
+import { newRoomOnboardingScene } from './scenes/newRoomOnboardingScene';
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 
 const stage = new Scenes.Stage<Scenes.SceneContext>([
   mainScene,
   newUserOnboardingScene,
+  newRoomOnboardingScene,
   returningUserOnboardingScene,
 ]);
 
