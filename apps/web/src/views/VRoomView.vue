@@ -1,33 +1,47 @@
 <script lang="ts" setup>
-  import { Districts } from 'types';
+  import { Districts, Room } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
+  import { addRoom } from 'sdk';
+  import { postEvent } from '@tma.js/sdk';
 
-  const adress = ref('');
+  const address = ref('');
   const district = ref(Districts.Bemowo);
-  const price = ref('1000');
+  const price = ref(1000.0);
   const { textarea, input: description } = useTextareaAutosize();
 
   const isValid = computed(() => {
     return !!(
-      adress.value.length > 0 &&
+      address.value.length > 0 &&
       description.value &&
       description.value.length > 0 &&
       district.value &&
-      price.value.length > 0
+      price.value > 0
     );
   });
 
   const mainButtonOptions = computed<MainButtonConfig>(() => ({
-    text: adress.value,
+    text: address.value,
     is_active: isValid.value,
   }));
 
   const userId = useRouteParams<string>('userId');
-
   useMainButton(mainButtonOptions, async () => {
     try {
+      const room = await addRoom({
+        userId: userId.value,
+        room: new Room({
+          address: address.value,
+          district: district.value,
+          photos: [],
+          description: description.value,
+          price: price.value,
+          likes: []
+        }),
+      });
+      postEvent('web_app_data_send', { data: JSON.stringify(room) });
+      postEvent('web_app_close');
     } catch (e) {
       console.error(e);
     }
@@ -45,7 +59,7 @@
       <div class="field">
         <label class="label">Адрес</label>
         <div class="control">
-            <input class="input" type="text" v-model="adress" />
+            <input class="input" type="text" v-model="address" />
         </div>
       </div>
       <div class="field">
@@ -84,7 +98,7 @@
               </figure>
             </div>
             <div class="media-content">
-              <p class="title is-4">{{ adress }}</p>
+              <p class="title is-4">{{ address }}</p>
               <p class="subtitle is-6">{{ district }}, {{ price }} zl</p>
             </div>
           </div>
