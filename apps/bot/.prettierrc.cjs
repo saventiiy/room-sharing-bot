@@ -1,3 +1,3 @@
-const prettier = require("linting/prettier");
+const prettier = require('linting/prettier');
 
 module.exports = { ...prettier };

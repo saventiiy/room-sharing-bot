@@ -1,4 +1,4 @@
-const eslintNode = require("linting/eslint-node");
+const eslintNode = require('linting/eslint-node');
 
 module.exports = {
   ...eslintNode,
