@@ -6,8 +6,12 @@
     "dev": "tsx watch src/index.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
     "start": "node dist/index.js",
-    "lint": "eslint --ext .js,.ts,.vue src/; prettier . --check",
-    "lint:fix": "prettier . --check"
+    "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
+    "lint:eslint": "eslint --ext .ts,.vue --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint:fix": "pnpm run lint:eslint:fix && pnpm run lint:prettier:fix",
+    "lint:eslint:fix": "eslint --fix --ext .ts,.vue --ignore-path .gitignore .",
+    "lint:prettier:fix": "prettier --write ."
   },
   "dependencies": {
     "dotenv": "^16.3.1",
