@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import VProfileView from '@/views/VProfileView.vue';
 import VListingView from '@/views/VListingView.vue';
 import VMatchesView from '@/views/VMatchesView.vue';
+import VNotFound from '@/views/VNotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,6 +10,7 @@ const router = createRouter({
     { path: '/profiles/:userId', name: 'profiles', component: VProfileView },
     { path: '/listings/:userId', name: 'listings', component: VListingView },
     { path: '/matches/:userId', name: 'matches', component: VMatchesView },
+    { path: '/:pathMatch(.*)*', name: 'not-found', component: VNotFound },
   ],
 });
 
