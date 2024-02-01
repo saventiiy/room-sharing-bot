@@ -32,4 +32,4 @@ coverage
 *.pem
 auto-imports.d.ts
 components.d.ts
-.eslint-auto-import.json
+.eslintrc-auto-import.json
