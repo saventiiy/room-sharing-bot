@@ -1,15 +1,14 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
   import { addProfile, getProfile } from 'sdk';
-  import { Profile, Gender, LookingFor } from 'types';
+  import { Profile, Gender, LookingFor, getAge } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
   import { ref, watch, computed } from 'vue';
-  import { Timestamp } from 'firebase/firestore';
-  
+
   const userId = useRouteParams<string>('userId');
   const name = ref('');
   const age = ref(18);
@@ -17,18 +16,12 @@
   const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
   
-  const cAge = (birthDate: Timestamp) => {
-    const currentDate = dayjs();
-    const bDay = dayjs.unix(birthDate.seconds);
-    return Math.floor(currentDate.diff(bDay, 'year', true));;
-  };
-  
   onMounted(() => {
     watch(userId, async (newUserId) => {
       try {
         const userProfile = await getProfile(newUserId);
         name.value = userProfile?.name || '';
-        age.value = cAge(userProfile?.dateofbirth);
+        age.value = getAge(userProfile?.dateofbirth);
         gender.value = userProfile?.gender || Gender.Other;
         lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
         bio.value = userProfile?.bio || '';

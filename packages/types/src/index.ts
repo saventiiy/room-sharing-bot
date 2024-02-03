@@ -1,6 +1,7 @@
 import type { Timestamp } from 'firebase/firestore';
 import { getId } from 'utils';
 import { BaseDocument, getTimestamp } from 'firebase-utils';
+import dayjs from 'dayjs';
 
 export enum Gender {
   Male = 'Male',
@@ -137,3 +138,11 @@ export class Roommate extends BaseDocument implements Roommate {
     this.likes = likes;
   }
 }
+
+//is it ok, to move it here?
+// i needed a fb modules
+export const getAge = (birthDate: Timestamp) => {
+  const currentDate = dayjs();
+  const bDay = dayjs.unix(birthDate.seconds);
+  return Math.floor(currentDate.diff(bDay, 'year', true));;
+};
