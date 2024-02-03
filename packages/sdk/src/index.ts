@@ -59,3 +59,32 @@ export const addRoom = async ({
   return room;
 };
 
+export const hasRoom = async (userId: string) => {
+  const docRef = doc(db, ROOM_COLLECTION, userId);
+  const docSnap = await getDoc(docRef);
+
+  return docSnap.exists();
+};
+
+export const getRoom = async (userId: string) => {
+  const docRef = doc(db, ROOM_COLLECTION, userId);
+  const docSnap = await getDoc(docRef);
+
+  if(docSnap.exists()){
+    const roomData = docSnap.data();
+    const room: Room = {
+      id: roomData.id,
+      createdAt: roomData.createdAt,
+      updatedAt: roomData.updatedAt,
+      address: roomData.address,
+      district: roomData.district,
+      photos: roomData.photos,
+      description: roomData.description,
+      price: roomData.price,
+      likes: roomData.likes
+    }
+    return room;
+  } else {
+    return null;
+  }
+};

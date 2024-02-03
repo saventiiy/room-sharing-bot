@@ -1,6 +1,7 @@
 import { Context, Markup } from 'telegraf';
+import { LookingFor } from 'types';
 
-export const editProfileMenu = (isHavingRoom: boolean, ctx: Context) => {
+export const editMenu = (lookingFor: LookingFor, hasRoom: boolean, ctx: Context) => {
   const buttons = [
     Markup.button.webApp(
       'Редактировать профиль',
@@ -8,11 +9,11 @@ export const editProfileMenu = (isHavingRoom: boolean, ctx: Context) => {
     ),
   ];
 
-  if (isHavingRoom) {
+  if (lookingFor == LookingFor.Flatmate && hasRoom) {
     buttons.push(
       Markup.button.webApp(
         'Редактировать комнату',
-        `${process.env.WEB_APP_URL}/anotherPage/${ctx.from.id}`,
+        `${process.env.WEB_APP_URL}/editRoom/${ctx.from.id}`,
       )
     );
   }

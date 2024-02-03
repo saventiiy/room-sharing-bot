@@ -1,6 +1,6 @@
 import { Scenes } from 'telegraf';
 import { mainMenu } from '../menus/mainMenu';
-import { EDIT_PROFILE_SCENE } from './editProfileScene';
+import { EDIT_SCENE } from './editScene';
 
 const MAIN_SCENE = 'mainScene';
 
@@ -13,7 +13,7 @@ mainScene.enter((ctx) => {
 
 mainScene.on('message', (ctx) => {
   if(ctx.message.text == 'Редактировать профиль'){
-    ctx.scene.enter(EDIT_PROFILE_SCENE);
+    ctx.scene.enter(EDIT_SCENE);
   }
 });
 
