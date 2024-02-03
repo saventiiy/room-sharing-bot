@@ -11,6 +11,7 @@ import {
 } from './scenes/newUserOnboardingScene';
 import { mainScene } from './scenes/mainScene';
 import { newRoomOnboardingScene } from './scenes/newRoomOnboardingScene';
+import { editProfileScene } from './scenes/editProfileScene';
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 
@@ -18,6 +19,7 @@ const stage = new Scenes.Stage<Scenes.SceneContext>([
   mainScene,
   newUserOnboardingScene,
   newRoomOnboardingScene,
+  editProfileScene,
   returningUserOnboardingScene,
 ]);
 
