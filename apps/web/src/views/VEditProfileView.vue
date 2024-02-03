@@ -17,35 +17,28 @@
   const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
   
-  //where i could move it?
-  function calculateAge(birthdate: Timestamp) {
-    const currentDate = new Date();
-    const birthDate = birthdate.toDate();
-    let age = currentDate.getFullYear() - birthDate.getFullYear();
-    const birthMonth = birthDate.getMonth();
-    const currentMonth = currentDate.getMonth();
-    const birthDay = birthDate.getDate();
-    const currentDay = currentDate.getDate();
-    if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
-      age--;
-    }
-    return age;
-  }
-
-  watch(userId, async (newUserId) => {
-    try {
-      const uProfile = await getProfile(newUserId);
-      console.log(uProfile);
-      name.value = uProfile?.name || '';
-      age.value = calculateAge(uProfile?.dateofbirth);
-      gender.value = uProfile?.gender || Gender.Other;
-      lookingFor.value = uProfile?.lookingFor || LookingFor.Room;
-      bio.value = uProfile?.bio || '';
-    } catch (err) {
-      console.error(err);
-    }
-  }, 
-  { immediate: true });
+  const cAge = (birthDate: Timestamp) => {
+    const currentDate = dayjs();
+    const bDay = dayjs.unix(birthDate.seconds);
+    return Math.floor(currentDate.diff(bDay, 'year', true));;
+  };
+  
+  onMounted(() => {
+    watch(userId, async (newUserId) => {
+      try {
+        const userProfile = await getProfile(newUserId);
+        name.value = userProfile?.name || '';
+        age.value = cAge(userProfile?.dateofbirth);
+        gender.value = userProfile?.gender || Gender.Other;
+        lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
+        bio.value = userProfile?.bio || '';
+      } catch (err) {
+        console.error(err);
+      }
+    }, 
+    { immediate: true });  
+  });
+  
 
   const isValid = computed(() => {
     return !!(

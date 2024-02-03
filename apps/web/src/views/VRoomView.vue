@@ -8,7 +8,7 @@
 
   const address = ref('');
   const district = ref(Districts.Bemowo);
-  const price = ref(1000.0);
+  const price = ref(1000);
   const { textarea, input: description } = useTextareaAutosize();
 
   const isValid = computed(() => {

@@ -6,7 +6,6 @@ import { MAIN_SCENE } from './mainScene';
 import { editProfileMenu } from '../menus/editProfileMenu';
 import { getProfile } from 'sdk';
 
-
 const EDIT_PROFILE_SCENE = 'editProfile' 
 const editProfileScene = new Scenes.BaseScene<Scenes.SceneContext>(
   'editProfile',
