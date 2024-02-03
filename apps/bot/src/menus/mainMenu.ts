@@ -5,8 +5,10 @@ export const mainMenu = (ctx: Context) =>
     ctx.from
       ? [
           [
-            'Редактировать профиль',
-
+            Markup.button.webApp(
+              'Профиль',
+              `${process.env.WEB_APP_URL}/profiles/${ctx.from.id}`,
+            ),
             Markup.button.webApp(
               'Объявление',
               `${process.env.WEB_APP_URL}/listings/${ctx.from.id}`,

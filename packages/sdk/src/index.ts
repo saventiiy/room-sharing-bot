@@ -24,29 +24,6 @@ export const hasProfile = async (userId: string) => {
   return docSnap.exists();
 };
 
-export const getProfile = async (userId: string) => {
-  const docRef = doc(db, PROFILE_COLLECTION, userId);
-  const docSnap = await getDoc(docRef);
-
-  if(docSnap.exists()){
-    const profileData = docSnap.data();
-    const profile: Profile = {
-      id: profileData.id,
-      createdAt: profileData.createdAt,
-      updatedAt: profileData.updatedAt,
-      name: profileData.name,
-      dateofbirth: profileData.dateofbirth,
-      gender: profileData.gender,
-      photos: profileData.photos,
-      bio: profileData.bio,
-      lookingFor: profileData.lookingFor
-    }
-    return profile;
-  } else {
-    return null;
-  }
-};
-
 export const addRoom = async ({
   userId,
   room,

@@ -15,7 +15,7 @@ const defaultReply = (ctx: Scenes.SceneContext) => {
 };
 
 newRoomOnboardingScene.enter((ctx) => {
-  console.log('Entering newRoomOnboardingScene');
+  console.log('Entering newUserOnboardingScene');
   defaultReply(ctx);
 });
 
