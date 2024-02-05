@@ -15,6 +15,9 @@
   const gender = ref(Gender.Male);
   const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
+  const searchingPointer = ref(0);
+  const likes = ref<string[]>([]);
+  const matches = ref<string[]>([]);
   
   onMounted(() => {
     watch(userId, async (newUserId) => {
@@ -25,6 +28,9 @@
         gender.value = userProfile?.gender || Gender.Other;
         lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
         bio.value = userProfile?.bio || '';
+        searchingPointer.value = userProfile?.searchingPointer || 0;
+        likes.value = userProfile?.likes || [];
+        matches.value = userProfile?.matches || [];
       } catch (err) {
         console.error(err);
       }
@@ -60,7 +66,10 @@
                 photos: [],
                 bio: bio.value,
                 dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-                lookingFor: lookingFor.value
+                lookingFor: lookingFor.value,
+                searchingPointer: searchingPointer.value, 
+                likes: likes.value,
+                matches: matches.value
             })});
             postEvent('web_app_data_send', { data: JSON.stringify(profile) });
             postEvent('web_app_close');

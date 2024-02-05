@@ -42,7 +42,10 @@
           photos: [],
           bio: bio.value,
           dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-          lookingFor: lookingFor.value 
+          lookingFor: lookingFor.value,
+          searchingPointer: 0,
+          likes: [],
+          matches: [],
         }),
       });
       postEvent('web_app_data_send', { data: JSON.stringify(profile) });

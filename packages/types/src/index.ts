@@ -39,6 +39,9 @@ export interface Profile extends BaseDocument {
   photos: string[];
   bio: string;
   lookingFor: LookingFor;
+  searchingPointer: number;
+  likes: string[];
+  matches: string[];
 }
 
 export class Profile extends BaseDocument implements Profile {
@@ -52,6 +55,9 @@ export class Profile extends BaseDocument implements Profile {
     photos = [],
     bio,
     lookingFor,
+    searchingPointer,
+    likes = [],
+    matches = [],
   }: {
     id?: string;
     createdAt?: Timestamp;
@@ -62,6 +68,9 @@ export class Profile extends BaseDocument implements Profile {
     photos: string[];
     bio: string;
     lookingFor: LookingFor;
+    searchingPointer: number;
+    likes: string[];
+    matches: string[];
   }) {
     super({ id, createdAt, updatedAt });
     this.name = name;
@@ -70,6 +79,9 @@ export class Profile extends BaseDocument implements Profile {
     this.photos = photos;
     this.bio = bio;
     this.lookingFor = lookingFor;
+    this.searchingPointer = searchingPointer;
+    this.likes = likes;
+    this.matches = matches;
   }
 }
 
