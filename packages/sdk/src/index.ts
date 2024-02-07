@@ -1,6 +1,6 @@
 import { db } from './firebase';
-import { collection, setDoc, doc, getDoc, getDocs, query, orderBy, limit, DocumentData } from 'firebase/firestore';
-import { Profile, Room } from 'types';
+import { collection, setDoc, doc, getDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { LookingFor, Profile, Room } from 'types';
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
@@ -38,49 +38,57 @@ export const getProfile = async (userId: string) => {
 
 export const getPotentialUser = async(currentUserId: string) => {
   const profile = await getProfile(currentUserId);
-  const position = profile?.searchingPointer || 0;
+  let position = profile?.searchingPointer || 0;
   const dbQuery = query(collection(db, PROFILE_COLLECTION), orderBy('createdAt'), limit(position + 1));
 
   const querySnapshot = await getDocs(dbQuery);
   const potentialUsers = querySnapshot.docs
-    .map(doc => doc.data())
-    .filter(potentialUser => potentialUser.id !== profile?.likes && potentialUser.id !== currentUserId);
+    .map(doc => doc.data() as Profile)
+    .filter(potentialUser => potentialUser.id !== profile?.id 
+      // && !profile?.likes.includes(potentialUser.id)
+      && !profile?.matches.includes(potentialUser.id));
 
   if (position < potentialUsers.length && profile != undefined) {
-    const potentialUserData = potentialUsers[position];
-    const potentialUser = potentialUserData as Profile;
-    console.log(potentialUser);
-    
     profile.searchingPointer += 1;
     await setDoc(doc(db, PROFILE_COLLECTION, currentUserId), { ...profile });
 
-    return potentialUser;
+    const potentialUser = potentialUsers[position] as Profile;
+    return returnProfile(potentialUser, currentUserId);
   } else {
     console.log(`No user found at position ${position} excluding yourself`);
-    return null;
+    return { profile: null, room: null };
+  }
+};
+
+const returnProfile = async(potentialUser: Profile, currentUserId: string) => {
+  if(potentialUser.lookingFor === LookingFor.Flatmate){
+    const room = await getRoom(currentUserId) as Room;
+    return { profile: potentialUser, room: room };
+  } else {
+    return { profile: potentialUser, room: null };
   }
 };
 
 export const like = async(userId: string, likedUserId: string) => {
   const profile = await getProfile(userId);
   const likedProfile = await getProfile(likedUserId);
-  const isMatch = likedProfile?.likes.some(likedId => likedId === userId)
+  const isMatch = likedProfile?.likes.includes(userId);
 
   if(isMatch){
     profile?.matches.push(likedUserId);
     likedProfile?.matches.push(userId);
     await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
     await setDoc(doc(db, PROFILE_COLLECTION, likedUserId), { ...likedProfile });
+    return true;
   } else {
-    const isAlreadyLiked = profile?.likes.some(likedId => likedId === likedUserId)
+    const isAlreadyLiked = profile?.likes.includes(likedUserId);
 
     if(!isAlreadyLiked){
       profile?.likes.push(likedUserId);
       await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
     }
+    return false;
   }
-  console.log(profile);
-  return profile;
 };
 
 export const addRoom = async ({

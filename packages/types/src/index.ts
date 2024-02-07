@@ -151,6 +151,11 @@ export class Roommate extends BaseDocument implements Roommate {
   }
 }
 
+export interface PotentialData {
+  profile: Profile | null;
+  room: Room | null;
+}
+
 //is it ok, to move it here?
 // i needed a fb modules
 export const getAge = (birthDate: Timestamp) => {

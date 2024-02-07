@@ -32,6 +32,7 @@
       const room = await addRoom({
         userId: userId.value,
         room: new Room({
+          id: userId.value,
           address: address.value,
           district: district.value,
           photos: [],
