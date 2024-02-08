@@ -76,44 +76,101 @@
 </script>
 
 <template>
-  <div class="container is-fluid has-text-centered">
-    <div class="card-content">
-      <div v-if="isMatch">
-        <p class="title is-4">Поздравляю это метч {{ isMatch }}</p>
-      </div>
+  <div class="container">
+    <div class="buttons-wrapper">
+      <button class="button full-height" @click="nextUser">С</button>
+      <div class="spacer">
         <div v-if="isShowProfile === false">
+      <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div>
+        <div class="card-content">
           <div class="media">
             <div class="media-content">
-              <p class="title is-4">{{ address }}, {{ district }}</p>
-              <p class="subtitle is-6 mn-0">{{ price }} zl</p>
-              <p class="subtitle is-6 mn-0">{{ description }}</p>
-              <div class="buttons-right">
-                <button @click="isShowProfile = true">Показать профиль</button>
-              </div>
+              <p class="title is-4">{{ address }} {{ district }}</p>
+              <p class="subtitle is-6 mn-0">{{ price }} zl</p> 
             </div>
           </div>
+          <div class="content">
+            {{ description }}
+          </div>
+          <div class="buttons-right">
+            <button @click="isShowProfile = true">Показать профиль</button>
+          </div>
         </div>
-        <div v-else>
+      </div>
+    </div>
+    <div v-else>
+      <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+          </figure>
+        </div>
+        <div class="card-content">
           <div class="media">
             <div class="media-content">
               <p class="title is-4">{{ name }}</p>
-              <p class="subtitle is-6 mb-0">{{ gender }}, {{ age }} years</p>
-              <p class="subtitle is-6 mb-0">{{ lookingFor }}</p>
-              <p class="subtitle is-8 mn-0">{{ bio }}</p>
-              <div v-if="address !== ''">
-                <div class="buttons-right">
-                <button @click="isShowProfile = false">Показать комнату</button>
-              </div>
+              <p class="subtitle is-6 mn-0">{{ gender }}, {{ age }} years</p> 
+              <p class="subtitle is-6 my-0">Looking for {{ lookingFor }}</p>
             </div>
           </div>
+          <div class="content">
+            {{ bio }}
+          </div>
+          <div v-if="address !== ''">
+        <div class="buttons-right">
+        <button @click="isShowProfile = false">Показать комнату</button>
+      </div>
         </div>
       </div>
+      </div>
     </div>
-    <div class="buttons-right">
-      <button @click="likeUser">Лайк</button>
+      </div>
+      <button class="button full-height" @click="likeUser">Л</button>
     </div>
-    <div class="buttons-left">
-      <button @click="nextUser">Следущий</button>
-    </div>
+
+    <!-- <div class="buttons is-fullwidth mt-4">
+      <button class="button is-large is-half is-responsive" @click="nextUser">Следущий</button>
+      <button class="button is-large is-half is-responsive" @click="likeUser">Лайк</button>
+    </div> -->
   </div>
 </template>
+
+<style>
+
+.card {
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.buttons-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.full-height {
+  min-height: 100%; 
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+/* .buttons.is-fullwidth {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons.is-fullwidth .button {
+  width: 48%;
+} */
+</style>
