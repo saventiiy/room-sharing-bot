@@ -76,6 +76,14 @@
 </script>
 
 <template>
+    <div v-if="name === '' && address === ''">
+    <section class="hero has-text-centered">
+      <div class="hero-body">
+        <p class="title">Вы просмотрели все профили</p>
+      </div>
+    </section>
+  </div>
+  <div v-else>
   <div class="container">
     <div class="buttons-wrapper">
       <button class="button full-height" @click="nextUser">С</button>
@@ -138,6 +146,7 @@
       <button class="button is-large is-half is-responsive" @click="likeUser">Лайк</button>
     </div> -->
   </div>
+</div>
 </template>
 
 <style>

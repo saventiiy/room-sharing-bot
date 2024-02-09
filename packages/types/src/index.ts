@@ -33,6 +33,7 @@ export enum Districts {
 }
 
 export interface Profile extends BaseDocument {
+  username: string;
   name: string;
   dateofbirth: Timestamp;
   gender: Gender;
@@ -44,11 +45,13 @@ export interface Profile extends BaseDocument {
   matches: string[];
 }
 
+//should remove here getId()
 export class Profile extends BaseDocument implements Profile {
   constructor({
     id = getId(),
     createdAt = getTimestamp(),
     updatedAt = getTimestamp(),
+    username,
     name,
     dateofbirth,
     gender,
@@ -62,6 +65,7 @@ export class Profile extends BaseDocument implements Profile {
     id?: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
+    username: string;
     name: string;
     dateofbirth: Timestamp;
     gender: Gender;
@@ -73,6 +77,7 @@ export class Profile extends BaseDocument implements Profile {
     matches: string[];
   }) {
     super({ id, createdAt, updatedAt });
+    this.username = username;
     this.name = name;
     this.dateofbirth = dateofbirth;
     this.gender = gender;

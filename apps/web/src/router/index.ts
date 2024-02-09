@@ -10,11 +10,11 @@ import VSearchingView from '@/views/VSearchingView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/profiles/:userId', name: 'profiles', component: VProfileView },
+    { path: '/profiles/:userId/:username', name: 'profiles', component: VProfileView },
     { path: '/listings/:userId', name: 'listings', component: VListingView },
     { path: '/matches/:userId', name: 'matches', component: VMatchesView },
     { path: '/rooms/:userId', name: 'rooms', component: VRoomView },
-    { path: '/editProfile/:userId', name: 'editProfile', component: VEditProfileView },
+    { path: '/editProfile/:userId/:username', name: 'editProfile', component: VEditProfileView },
     { path: '/editRoom/:userId', name: 'editRoom', component: VEditRoomView },
     { path: '/searching/:userId', name: 'searching', component: VSearchingView },
   ]
