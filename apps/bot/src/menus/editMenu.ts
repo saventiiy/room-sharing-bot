@@ -5,7 +5,7 @@ export const editMenu = (lookingFor: LookingFor, hasRoom: boolean, ctx: Context)
   const buttons = [
     Markup.button.webApp(
       'Редактировать профиль',
-      `${process.env.WEB_APP_URL}/editProfile/${ctx.from.id}`,
+      `${process.env.WEB_APP_URL}/editProfile/${ctx.from?.id}/${ctx.from?.username}`,
     ),
   ];
 
@@ -13,7 +13,7 @@ export const editMenu = (lookingFor: LookingFor, hasRoom: boolean, ctx: Context)
     buttons.push(
       Markup.button.webApp(
         'Редактировать комнату',
-        `${process.env.WEB_APP_URL}/editRoom/${ctx.from.id}`,
+        `${process.env.WEB_APP_URL}/editRoom/${ctx.from?.id}`,
       )
     );
   }

@@ -10,6 +10,7 @@
   import { ref, watch, computed } from 'vue';
 
   const userId = useRouteParams<string>('userId');
+  const username = useRouteParams<string>('username');
   const name = ref('');
   const age = ref(18);
   const gender = ref(Gender.Male);
@@ -61,15 +62,16 @@
             const profile = await addProfile({
                 userId: userId.value,
                 profile: new Profile({
-                name: name.value,
-                gender: gender.value,
-                photos: [],
-                bio: bio.value,
-                dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-                lookingFor: lookingFor.value,
-                searchingPointer: searchingPointer.value, 
-                likes: likes.value,
-                matches: matches.value
+                  username: username.value,
+                  name: name.value,
+                  gender: gender.value,
+                  photos: [],
+                  bio: bio.value,
+                  dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+                  lookingFor: lookingFor.value,
+                  searchingPointer: searchingPointer.value, 
+                  likes: likes.value,
+                  matches: matches.value
             })});
             postEvent('web_app_data_send', { data: JSON.stringify(profile) });
             postEvent('web_app_close');

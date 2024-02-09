@@ -15,8 +15,8 @@ const editScene = new Scenes.BaseScene<Scenes.SceneContext>(
 let profileSnapshot: Profile = null;
 
 const defaultReply = async (ctx: Scenes.SceneContext) => {
-  profileSnapshot = await getProfile(String(ctx.from.id));
-  const hasRoomData = await hasRoom(String(ctx.from.id));
+  profileSnapshot = await getProfile(String(ctx.from?.id));
+  const hasRoomData = await hasRoom(String(ctx.from?.id));
   ctx.reply(
     'Что вы хотите отредактировать?',
     editMenu(profileSnapshot.lookingFor, hasRoomData, ctx),

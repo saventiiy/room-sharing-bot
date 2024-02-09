@@ -31,6 +31,7 @@
   }));
 
   const userId = useRouteParams<string>('userId');
+  const username = useRouteParams<string>('username');
 
   useMainButton(mainButtonOptions, async () => {
     try {
@@ -38,6 +39,7 @@
         userId: userId.value,
         profile: new Profile({
           id: userId.value,
+          username: username.value,
           name: name.value,
           gender: gender.value,
           photos: [],
@@ -148,6 +150,7 @@
                   alt="Placeholder image" />
               </figure>
             </div>
+            <!-- Add looking for -->
             <div class="media-content">
               <p class="title is-4">{{ name }}</p>
               <p class="subtitle is-6">{{ gender }}, {{ age }} years</p>
