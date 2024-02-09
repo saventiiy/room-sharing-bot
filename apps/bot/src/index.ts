@@ -11,7 +11,7 @@ import {
 } from './scenes/newUserOnboardingScene';
 import { mainScene } from './scenes/mainScene';
 import { newRoomOnboardingScene } from './scenes/newRoomOnboardingScene';
-import { editScene } from './scenes/editScene';
+import { EDIT_SCENE, editScene } from './scenes/editScene';
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 
@@ -37,6 +37,9 @@ bot.start(async (ctx) => {
 
 bot.on('message', (ctx) => {
   console.log('pong:', ctx.message);
+  if(ctx.message.text == 'Редактировать профиль'){
+    ctx.scene.enter(EDIT_SCENE);
+  }
 });
 
 bot.launch();

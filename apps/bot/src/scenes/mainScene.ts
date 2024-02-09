@@ -11,10 +11,4 @@ mainScene.enter((ctx) => {
   ctx.reply('Здраствуйте!', mainMenu(ctx));
 });
 
-mainScene.on('message', (ctx) => {
-  if(ctx.message.text == 'Редактировать профиль'){
-    ctx.scene.enter(EDIT_SCENE);
-  }
-});
-
 export { MAIN_SCENE, mainScene };
