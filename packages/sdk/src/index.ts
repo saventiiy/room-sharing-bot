@@ -75,6 +75,7 @@ export const like = async(userId: string, likedUserId: string) => {
   const isMatch = likedProfile?.likes.includes(userId);
 
   if(isMatch){
+    profile?.likes.push(likedUserId);
     profile?.matches.push(likedUserId);
     likedProfile?.matches.push(userId);
     await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
