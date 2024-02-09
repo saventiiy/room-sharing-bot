@@ -1,6 +1,6 @@
 import { db } from './firebase';
 import { collection, setDoc, doc, getDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { LookingFor, Profile, Room } from 'types';
+import { LookingFor, Profile, Room, PotentialData} from 'types';
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
@@ -88,6 +88,32 @@ export const like = async(userId: string, likedUserId: string) => {
       await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
     }
     return false;
+  }
+};
+
+export const getMatched = async (userId: string) => {
+  const profile = await getProfile(userId);
+  if (profile != undefined) {
+    if (profile.matches.length !== 0) {
+      const potentialDataList: PotentialData[] = [];
+      for (const matchedId of profile.matches) {
+        const matchedProfile = await getProfile(matchedId);
+        let potentialData: PotentialData = {
+          profile: matchedProfile,
+          room: null
+        };
+        if (matchedProfile != undefined && matchedProfile.lookingFor == LookingFor.Flatmate) {
+          const room = await getRoom(userId);
+          potentialData.room = room;
+        }
+        potentialDataList.push(potentialData);
+      }
+      return potentialDataList;
+    } else {
+      return [];
+    }
+  } else {
+    return [];
   }
 };
 
