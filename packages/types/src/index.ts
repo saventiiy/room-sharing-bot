@@ -1,5 +1,4 @@
 import type { Timestamp } from 'firebase/firestore';
-import { getId } from 'utils';
 import { BaseDocument, getTimestamp } from 'firebase-utils';
 import dayjs from 'dayjs';
 
@@ -33,6 +32,7 @@ export enum Districts {
 }
 
 export interface Profile extends BaseDocument {
+  id: string;
   username: string;
   name: string;
   dateofbirth: Timestamp;
@@ -48,7 +48,7 @@ export interface Profile extends BaseDocument {
 //should remove here getId()
 export class Profile extends BaseDocument implements Profile {
   constructor({
-    id = getId(),
+    id,
     createdAt = getTimestamp(),
     updatedAt = getTimestamp(),
     username,
@@ -62,7 +62,7 @@ export class Profile extends BaseDocument implements Profile {
     likes = [],
     matches = [],
   }: {
-    id?: string;
+    id: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
     username: string;
@@ -76,7 +76,8 @@ export class Profile extends BaseDocument implements Profile {
     likes: string[];
     matches: string[];
   }) {
-    super({ id, createdAt, updatedAt });
+    super({ createdAt, updatedAt });
+    this.id = id;
     this.username = username;
     this.name = name;
     this.dateofbirth = dateofbirth;
@@ -91,6 +92,7 @@ export class Profile extends BaseDocument implements Profile {
 }
 
 export interface Room extends BaseDocument {
+  id: string;
   address: string;
   district: Districts;
   photos: string[];
@@ -101,7 +103,7 @@ export interface Room extends BaseDocument {
 
 export class Room extends BaseDocument implements Room {
   constructor({
-    id = getId(),
+    id,
     createdAt = getTimestamp(),
     updatedAt = getTimestamp(),
     address,
@@ -111,7 +113,7 @@ export class Room extends BaseDocument implements Room {
     price,
     likes = [],
   }: {
-    id?: string;
+    id: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
     address: string;
@@ -121,37 +123,13 @@ export class Room extends BaseDocument implements Room {
     price: number;
     likes: string[];
   }) {
-    super({ id, createdAt, updatedAt });
+    super({ createdAt, updatedAt });
+    this.id = id;
     this.address = address;
     this.district = district;
     this.photos = photos;
     this.description = description;
     this.price = price;
-    this.likes = likes;
-  }
-}
-
-export interface Roommate extends BaseDocument {
-  description: string;
-  likes: string[];
-}
-
-export class Roommate extends BaseDocument implements Roommate {
-  constructor({
-    id = getId(),
-    createdAt = getTimestamp(),
-    updatedAt = getTimestamp(),
-    description,
-    likes = [],
-  }: {
-    id?: string;
-    createdAt?: Timestamp;
-    updatedAt?: Timestamp;
-    description: string;
-    likes: string[];
-  }) {
-    super({ id, createdAt, updatedAt });
-    this.description = description;
     this.likes = likes;
   }
 }

@@ -62,6 +62,7 @@
             const profile = await addProfile({
                 userId: userId.value,
                 profile: new Profile({
+                  id: userId.value,
                   username: username.value,
                   name: name.value,
                   gender: gender.value,
