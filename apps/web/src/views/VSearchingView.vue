@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { getPotentialUser, like } from 'sdk';
   import { Gender, LookingFor, getAge, Districts } from 'types';
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
 
   const userId = useRouteParams<string>('userId');
   const name = ref('');
@@ -18,6 +18,25 @@
 
   const isShowProfile = ref(true);
   const isMatch = ref(false);
+  const matchNotification = ref('у вас случился метч');
+  const isAllProfilesShowed = ref(true);
+  const allProfilesShowed = ref('Вы просмотрели все профили');
+
+  watch(isMatch, (newValue) => {
+    if (newValue) {
+      setTimeout(() => {
+        isMatch.value = false;
+      }, 1000);
+    }
+  });
+  
+  watch(name, (newValue) => {
+    if(newValue === ''){
+      isAllProfilesShowed.value = true;
+    } else {
+      isAllProfilesShowed.value = false;
+    }
+  });
 
   const loadUser = async () => {
     try {
@@ -47,20 +66,22 @@
           bio.value = potentialData.profile.bio || '';
           
           likedUserId.value = potentialData.profile.id;
+      } else {
+          name.value = '';
       }
     } catch (err) {
       console.error(err);
     }
   };
 
-  onMounted(() => {
-    loadUser();
+  onMounted(async () => {
+    await loadUser();
   });
 
   const likeUser = async () => {
     try {
       isMatch.value = await like(userId.value, likedUserId.value);
-      loadUser();
+      await loadUser();
     } catch (err) {
       console.error(err);
     }
@@ -68,7 +89,7 @@
 
   const nextUser = async () => {
     try {
-      loadUser();
+      await loadUser();
     } catch (err) {
       console.error(err);
     }
@@ -76,110 +97,84 @@
 </script>
 
 <template>
-    <div v-if="name === '' && address === ''">
+  <div v-if="isAllProfilesShowed">
     <section class="hero has-text-centered">
       <div class="hero-body">
-        <p class="title">Вы просмотрели все профили</p>
+        <p class="title">{{ allProfilesShowed }}</p>
       </div>
     </section>
   </div>
   <div v-else>
-  <div class="container">
-    <div class="buttons-wrapper">
-      <button class="button full-height" @click="nextUser">С</button>
-      <div class="spacer">
-        <div v-if="isShowProfile === false">
-      <div class="card">
-        <div class="card-image">
-          <figure class="image is-4by3">
-            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-          </figure>
-        </div>
-        <div class="card-content">
-          <div class="media">
-            <div class="media-content">
-              <p class="title is-4">{{ address }} {{ district }}</p>
-              <p class="subtitle is-6 mn-0">{{ price }} zl</p> 
+    <div v-if="isMatch" class="notification is-success">{{ matchNotification }}</div>
+    <div class="container">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+        </figure>
+      </div>
+      <div class="buttons-wrapper">
+        <button class="button full-height" @click="nextUser">С</button>
+        <div class="spacer">
+          <div v-if="isShowProfile === false">
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">{{ address }} {{ district }}</p>
+                    <p class="subtitle is-6 mn-0">{{ price }} zl</p> 
+                  </div>
+                </div>
+                <div class="content">
+                  {{ description }}
+                </div>
+                <div class="buttons-right">
+                  <button @click="isShowProfile = true">Показать профиль</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="content">
-            {{ description }}
-          </div>
-          <div class="buttons-right">
-            <button @click="isShowProfile = true">Показать профиль</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else>
-      <div class="card">
-        <div class="card-image">
-          <figure class="image is-4by3">
-            <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-          </figure>
-        </div>
-        <div class="card-content">
-          <div class="media">
-            <div class="media-content">
-              <p class="title is-4">{{ name }}</p>
-              <p class="subtitle is-6 mn-0">{{ gender }}, {{ age }} years</p> 
-              <p class="subtitle is-6 my-0">Looking for {{ lookingFor }}</p>
+          <div v-else>
+            <div class="card">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <p class="title is-4">{{ name }}</p>
+                    <p class="subtitle is-6 mn-0">{{ gender }}, {{ age }} years</p> 
+                    <p class="subtitle is-6 my-0">Looking for {{ lookingFor }}</p>
+                  </div>
+                </div>
+                <div class="content">
+                  {{ bio }}
+                </div>
+                <div v-if="address !== ''">
+                  <div class="buttons-right">
+                    <button @click="isShowProfile = false">Показать комнату</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="content">
-            {{ bio }}
-          </div>
-          <div v-if="address !== ''">
-        <div class="buttons-right">
-        <button @click="isShowProfile = false">Показать комнату</button>
-      </div>
         </div>
-      </div>
+        <button class="button full-height" @click="likeUser">Л</button>
       </div>
     </div>
-      </div>
-      <button class="button full-height" @click="likeUser">Л</button>
-    </div>
-
-    <!-- <div class="buttons is-fullwidth mt-4">
-      <button class="button is-large is-half is-responsive" @click="nextUser">Следущий</button>
-      <button class="button is-large is-half is-responsive" @click="likeUser">Лайк</button>
-    </div> -->
   </div>
-</div>
 </template>
 
 <style>
-
-.card {
-  height: 100vh;
-}
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
-
 .buttons-wrapper {
   display: flex;
   align-items: center;
 }
-
 .full-height {
   min-height: 100%; 
 }
-
 .spacer {
   flex-grow: 1;
 }
-
-/* .buttons.is-fullwidth {
-  display: flex;
-  justify-content: space-between;
-}
-
-.buttons.is-fullwidth .button {
-  width: 48%;
-} */
 </style>

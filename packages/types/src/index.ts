@@ -31,6 +31,29 @@ export enum Districts {
   Zoliborz = 'Zoliborz',
 }
 
+export interface Viewed extends BaseDocument {
+  id: string;
+  viewedIds: string[];
+}
+
+export class Viewed extends BaseDocument implements Viewed {
+  constructor({
+    id, 
+    viewedIds = [],
+    createdAt = getTimestamp(),
+    updatedAt = getTimestamp()
+  }: {
+    id: string;
+    createdAt?: Timestamp;
+    updatedAt?: Timestamp;
+    viewedIds: string[];
+  }){
+    super({ createdAt, updatedAt });
+    this.id = id;
+    this.viewedIds = viewedIds;
+  }
+}
+
 export interface Profile extends BaseDocument {
   id: string;
   username: string;
@@ -45,7 +68,6 @@ export interface Profile extends BaseDocument {
   matches: string[];
 }
 
-//should remove here getId()
 export class Profile extends BaseDocument implements Profile {
   constructor({
     id,

@@ -1,9 +1,10 @@
 import { db } from './firebase';
-import { collection, setDoc, doc, getDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
-import { LookingFor, Profile, Room, PotentialData} from 'types';
+import { collection, setDoc, doc, getDoc, getDocs, query, orderBy } from 'firebase/firestore';
+import { LookingFor, Profile, Room, PotentialData, Viewed} from 'types';
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
+const VIEWED_COLLECTION = 'viewed';
 
 export const addProfile = async ({
   userId,
@@ -13,7 +14,11 @@ export const addProfile = async ({
   profile: Profile;
 }) => {
   await setDoc(doc(db, PROFILE_COLLECTION, userId), { ...profile });
-
+  await addViewed({userId: userId,
+     viewed: new Viewed({      
+      id: userId, 
+      viewedIds: []
+    })});
   return profile;
 };
 
@@ -36,33 +41,65 @@ export const getProfile = async (userId: string) => {
   }
 };
 
+export const addViewed = async ({
+  userId,
+  viewed,
+}: {
+  userId: string;
+  viewed: Viewed;
+}) => {
+  await setDoc(doc(db, VIEWED_COLLECTION, userId), { ...viewed });
+
+  return viewed;
+};
+
+export const getViewedProfiles = async (userId: string) => {
+  const docRef = doc(db, VIEWED_COLLECTION, userId);
+  const docSnap = await getDoc(docRef);
+
+  if(docSnap.exists()){
+    const viewedIds = docSnap.data() as Viewed;
+    return viewedIds;
+  } else {
+    return null;
+  }
+};
+
+export const addViewedId = async (viewedProfile: Viewed, userId: string, viewedId: string) => {
+  viewedProfile.viewedIds.push(viewedId);
+  await setDoc(doc(db, VIEWED_COLLECTION, userId), { ...viewedProfile });
+  return viewedProfile;
+};
+
+
 export const getPotentialUser = async(currentUserId: string) => {
   const profile = await getProfile(currentUserId);
-  let position = profile?.searchingPointer || 0;
-  const dbQuery = query(collection(db, PROFILE_COLLECTION), orderBy('createdAt'), limit(position + 1));
+  const viewedProfiles = await getViewedProfiles(currentUserId);
+  
+  const dbQuery = query(collection(db, PROFILE_COLLECTION), orderBy('createdAt'));
 
   const querySnapshot = await getDocs(dbQuery);
   const potentialUsers = querySnapshot.docs
     .map(doc => doc.data() as Profile)
     .filter(potentialUser => potentialUser.id !== profile?.id 
-      // && !profile?.likes.includes(potentialUser.id)
+      && !viewedProfiles?.viewedIds.includes(potentialUser.id)
+      && !profile?.likes.includes(potentialUser.id)
       && !profile?.matches.includes(potentialUser.id));
 
-  if (position < potentialUsers.length && profile != undefined) {
-    profile.searchingPointer += 1;
-    await setDoc(doc(db, PROFILE_COLLECTION, currentUserId), { ...profile });
+  if (potentialUsers.length > 0 && profile != undefined && viewedProfiles != undefined) {
+    const potentialUser = potentialUsers[0] as Profile;
+    addViewedId(viewedProfiles, currentUserId, potentialUser.id);
 
-    const potentialUser = potentialUsers[position] as Profile;
-    return returnProfile(potentialUser, currentUserId);
+    return returnProfile(potentialUser);
   } else {
-    console.log(`No user found at position ${position} excluding yourself`);
+    console.log(`No user found at position ${0} excluding yourself`);
     return { profile: null, room: null };
   }
 };
 
-const returnProfile = async(potentialUser: Profile, currentUserId: string) => {
+const returnProfile = async(potentialUser: Profile) => {
   if(potentialUser.lookingFor === LookingFor.Flatmate){
-    const room = await getRoom(currentUserId) as Room;
+    const room = await getRoom(potentialUser.id) as Room;
     return { profile: potentialUser, room: room };
   } else {
     return { profile: potentialUser, room: null };
@@ -104,7 +141,7 @@ export const getMatched = async (userId: string) => {
           room: null
         };
         if (matchedProfile != undefined && matchedProfile.lookingFor == LookingFor.Flatmate) {
-          const room = await getRoom(userId);
+          const room = await getRoom(matchedProfile.id);
           potentialData.room = room;
         }
         potentialDataList.push(potentialData);
