@@ -15,7 +15,7 @@ export const mainMenu = (ctx: Context) =>
               'Мэтчи',
               `${process.env.WEB_APP_URL}/matches/${ctx.from.id}`,
             ),
-            'Редактировать профиль',
+            Markup.button.text('Редактировать профиль'),
           ],
         ]
       : [],
