@@ -7,6 +7,7 @@
   import dayjs from 'dayjs';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
+  import VProfileCardView from './VProfileCardView.vue';
 
   const name = ref('');
   const age = ref(18);
@@ -139,34 +140,14 @@
     <div class="block"></div>
   </div>
   <div class="footer">
-    <div class="block">
-      <div class="card">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
-                  alt="Placeholder image" />
-              </figure>
-            </div>
-            <!-- Add looking for -->
-            <div class="media-content">
-              <p class="title is-4">{{ name }}</p>
-              <p class="subtitle is-6">{{ gender }}, {{ age }} years</p>
-            </div>
-          </div>
-          <div class="content">
-            <template v-if="bio">{{ bio }}</template>
-            <template v-else>
-              <span class="is-italic is-danger">
-                Добавьте информацию «О себе»
-              </span>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
+    <VProfileCardView
+      :name="name"
+      :gender="gender"
+      :age="age"
+      :lookingFor="lookingFor"
+      :bio="bio"
+      :isProfile="true "
+    />
     <div class="block has-text-centered">
       Вот так будет выглядеть ваш профиль для соискателей
     </div>

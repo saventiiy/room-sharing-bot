@@ -8,6 +8,7 @@
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
   import { ref, watch, computed } from 'vue';
+  import VProfileCardView from './VProfileCardView.vue';
 
   const userId = useRouteParams<string>('userId');
   const username = useRouteParams<string>('username');
@@ -81,6 +82,12 @@
       console.error(e);
     }
   });
+
+  const photos = [
+    { url: "https://disgustingmen.com/wp-content/uploads/2021/06/kerouac_l_min.jpeg"},
+    { url: "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/871cba08-800e-4c77-8123-ab768799f680/220x330" },
+    { url: "https://artifex.ru/wp-content/uploads/2020/10/%D0%94%D0%B6%D0%B5%D0%BA-%D0%9A%D0%B5%D1%80%D1%83%D0%B0%D0%BA-%D0%A4%D0%BE%D1%82%D0%BE-4.jpeg"}
+  ];
 </script>
 
 <template>
@@ -163,33 +170,15 @@
     <div class="block"></div>
   </div>
   <div class="footer">
-    <div class="block">
-      <div class="card">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
-                  alt="Placeholder image" />
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">{{ name }}</p>
-              <p class="subtitle is-6">{{ gender }}, {{ age }} years</p>
-            </div>
-          </div>
-          <div class="content">
-            <template v-if="bio">{{ bio }}</template>
-            <template v-else>
-              <span class="is-italic is-danger">
-                Добавьте информацию «О себе»
-              </span>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
+    <VProfileCardView
+        :photos="photos"
+        :name="name"
+        :gender="gender"
+        :age="age"
+        :lookingFor="lookingFor"
+        :bio="bio"
+        :isProfile="true"
+      />
     <div class="block has-text-centered">
       Вот так будет выглядеть ваш профиль для соискателей
     </div>

@@ -5,6 +5,7 @@
   import { type MainButtonConfig } from '@/composables/useMainButton';
   import { addRoom } from 'sdk';
   import { postEvent } from '@tma.js/sdk';
+  import VProfileCardView from './VProfileCardView.vue';
 
   const address = ref('');
   const district = ref(Districts.Bemowo);
@@ -87,33 +88,13 @@
     <div class="block"></div>
   </div>
   <div class="footer">
-    <div class="block">
-      <div class="card">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
-                  alt="Placeholder image" />
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">{{ address }}</p>
-              <p class="subtitle is-6">{{ district }}, {{ price }} zl</p>
-            </div>
-          </div>
-          <div class="content">
-            <template v-if="description">{{ description }}</template>
-            <template v-else>
-              <span class="is-italic is-danger">
-                Добавьте информацию о комнате
-              </span>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
+    <VProfileCardView
+      :address="address"
+      :district="district"
+      :price="price"
+      :description="description"
+      :isProfile="false"
+    />
     <div class="block has-text-centered">
       Вот так будет выглядеть профиль комнаты для соискателей
     </div>

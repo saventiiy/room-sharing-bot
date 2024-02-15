@@ -2,6 +2,7 @@
   import { getPotentialUser, like } from 'sdk';
   import { Gender, LookingFor, getAge, Districts } from 'types';
   import { ref, onMounted, watch } from 'vue';
+  import VSliderView from './VSliderView.vue';
 
   const userId = useRouteParams<string>('userId');
   const name = ref('');
@@ -21,6 +22,12 @@
   const matchNotification = ref('у вас случился метч');
   const isAllProfilesShowed = ref(true);
   const allProfilesShowed = ref('Вы просмотрели все профили');
+
+  const photos = [
+    { url: "https://disgustingmen.com/wp-content/uploads/2021/06/kerouac_l_min.jpeg"},
+    { url: "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/871cba08-800e-4c77-8123-ab768799f680/220x330" },
+    { url: "https://artifex.ru/wp-content/uploads/2020/10/%D0%94%D0%B6%D0%B5%D0%BA-%D0%9A%D0%B5%D1%80%D1%83%D0%B0%D0%BA-%D0%A4%D0%BE%D1%82%D0%BE-4.jpeg"}
+  ];
 
   watch(isMatch, (newValue) => {
     if (newValue) {
@@ -108,9 +115,9 @@
     <div v-if="isMatch" class="notification is-success">{{ matchNotification }}</div>
     <div class="container">
       <div class="card-image">
-        <figure class="image is-4by3">
-          <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-        </figure>
+        <VSliderView
+          :photos="photos"
+        />
       </div>
       <div class="buttons-wrapper">
         <button class="button full-height" @click="nextUser">С</button>
