@@ -1,6 +1,7 @@
 import { db } from './firebase';
 import { collection, setDoc, doc, getDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { LookingFor, Profile, Room, PotentialData, Viewed} from 'types';
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
@@ -183,5 +184,21 @@ export const getRoom = async (userId: string) => {
     return room;
   } else {
     return null;
+  }
+};
+
+export const saveMultiplePhotosForProfile = async (userId: string, type: string, files: File[]) => {
+  const storage = getStorage();
+  const storageRef = ref(storage, `${type}/${userId}`);
+
+  if (files !== null && files !== undefined && files.length !== 0) {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const filePath = `${i}_${file.name}`;
+      const fileRef = ref(storageRef, filePath);
+      uploadBytes(fileRef, file).then(() => {
+        console.log('Uploaded');
+      });
+    }
   }
 };
