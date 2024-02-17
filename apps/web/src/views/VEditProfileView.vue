@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
-  import { addProfile, getProfile } from 'sdk';
+  import { addProfile, getProfile, getPhotos } from 'sdk';
   import { Profile, Gender, LookingFor, getAge } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
@@ -20,10 +20,12 @@
   const searchingPointer = ref(0);
   const likes = ref<string[]>([]);
   const matches = ref<string[]>([]);
+  const photos = ref<string[]>([]);
   
   onMounted(() => {
     watch(userId, async (newUserId) => {
       try {
+        photos.value = await getPhotos(userId.value, 'profiles');
         const userProfile = await getProfile(newUserId);
         name.value = userProfile?.name || '';
         age.value = getAge(userProfile?.dateofbirth);
@@ -82,12 +84,6 @@
       console.error(e);
     }
   });
-
-  const photos = [
-    { url: "https://disgustingmen.com/wp-content/uploads/2021/06/kerouac_l_min.jpeg"},
-    { url: "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/871cba08-800e-4c77-8123-ab768799f680/220x330" },
-    { url: "https://artifex.ru/wp-content/uploads/2020/10/%D0%94%D0%B6%D0%B5%D0%BA-%D0%9A%D0%B5%D1%80%D1%83%D0%B0%D0%BA-%D0%A4%D0%BE%D1%82%D0%BE-4.jpeg"}
-  ];
 </script>
 
 <template>

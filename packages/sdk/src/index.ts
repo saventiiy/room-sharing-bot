@@ -1,7 +1,7 @@
-import { db } from './firebase';
+import { db, firebaseApp } from './firebase';
 import { collection, setDoc, doc, getDoc, getDocs, query, orderBy } from 'firebase/firestore';
 import { LookingFor, Profile, Room, PotentialData, Viewed} from 'types';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
@@ -89,11 +89,15 @@ export const getPotentialUser = async(currentUserId: string) => {
 
   if (potentialUsers.length > 0 && profile != undefined && viewedProfiles != undefined) {
     const potentialUser = potentialUsers[0] as Profile;
-    addViewedId(viewedProfiles, currentUserId, potentialUser.id);
+    await addViewedId(viewedProfiles, currentUserId, potentialUser.id);
 
     return returnProfile(potentialUser);
   } else {
-    console.log(`No user found at position ${0} excluding yourself`);
+    await addViewed({userId: currentUserId,
+      viewed: new Viewed({      
+       id: currentUserId, 
+       viewedIds: []
+     })});
     return { profile: null, room: null };
   }
 };
@@ -200,5 +204,27 @@ export const saveMultiplePhotosForProfile = async (userId: string, type: string,
         console.log('Uploaded');
       });
     }
+  }
+};
+
+export const getPhotos = async (userId: string, type: string) => {
+  const storage = getStorage(firebaseApp, 'gs://roomsharebot.appspot.com');
+  const storageRef = ref(storage, `${type}/${userId}`);
+  const photoUrls: string[] = [];
+
+  try {
+    const filesList = await listAll(storageRef);
+
+    for (const fileRef of filesList.items) {
+      const url = await getDownloadURL(fileRef);
+      photoUrls.push(url);
+    }
+
+    console.log(photoUrls);
+
+    return photoUrls;
+  } catch (error) {
+    console.error('Error getting photos:', error);
+    return [];
   }
 };
