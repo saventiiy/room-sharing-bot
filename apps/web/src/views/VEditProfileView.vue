@@ -9,6 +9,7 @@
   import { type MainButtonConfig } from '@/composables/useMainButton';
   import { ref, watch, computed } from 'vue';
   import VProfileCardView from './VProfileCardView.vue';
+  import { uploadFile } from 'sdk';
 
   const userId = useRouteParams<string>('userId');
   const username = useRouteParams<string>('username');
@@ -61,6 +62,8 @@
     is_active: isValid.value,
   }));
 
+  const file = ref<File>();
+
   useMainButton(mainButtonOptions, async () => {
     try {
       if (
@@ -91,6 +94,15 @@
       console.error(e);
     }
   });
+
+  const onFileChanged = ($event: Event) => {
+    const target = $event.target as HTMLInputElement;
+    if (target && target.files) {
+      file.value = target.files[0];
+    }
+
+    file.value && uploadFile(file.value, file.value?.name);
+  };
 </script>
 
 <template>
@@ -101,6 +113,11 @@
   </section>
   <div class="container is-fluid">
     <div class="block">
+      <input
+        type="file"
+        @change="onFileChanged($event)"
+        accept="image/*"
+        capture />
       <div class="field">
         <label class="label">Имя</label>
         <div class="control">

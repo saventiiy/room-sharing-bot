@@ -15,6 +15,9 @@ import {
   uploadBytes,
   listAll,
   getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
 } from 'firebase/storage';
 
 const PROFILE_COLLECTION = 'profiles';
@@ -265,4 +268,11 @@ export const getPhotos = async (userId: string, type: string) => {
     console.error('Error getting photos:', error);
     return [];
   }
+};
+
+export const uploadFile = async (file: Blob | File, name: string) => {
+  const storage = getStorage();
+  const storageRef = ref(storage, name);
+
+  await uploadBytes(storageRef, file);
 };
