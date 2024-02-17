@@ -21,27 +21,29 @@
   const likes = ref<string[]>([]);
   const matches = ref<string[]>([]);
   const photos = ref<string[]>([]);
-  
+
   onMounted(() => {
-    watch(userId, async (newUserId) => {
-      try {
-        photos.value = await getPhotos(userId.value, 'profiles');
-        const userProfile = await getProfile(newUserId);
-        name.value = userProfile?.name || '';
-        age.value = getAge(userProfile?.dateofbirth);
-        gender.value = userProfile?.gender || Gender.Other;
-        lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
-        bio.value = userProfile?.bio || '';
-        searchingPointer.value = userProfile?.searchingPointer || 0;
-        likes.value = userProfile?.likes || [];
-        matches.value = userProfile?.matches || [];
-      } catch (err) {
-        console.error(err);
-      }
-    }, 
-    { immediate: true });  
+    watch(
+      userId,
+      async (newUserId) => {
+        try {
+          photos.value = await getPhotos(userId.value, 'profiles');
+          const userProfile = await getProfile(newUserId);
+          name.value = userProfile?.name || '';
+          age.value = getAge(userProfile?.dateofbirth);
+          gender.value = userProfile?.gender || Gender.Other;
+          lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
+          bio.value = userProfile?.bio || '';
+          searchingPointer.value = userProfile?.searchingPointer || 0;
+          likes.value = userProfile?.likes || [];
+          matches.value = userProfile?.matches || [];
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      { immediate: true },
+    );
   });
-  
 
   const isValid = computed(() => {
     return !!(
@@ -61,25 +63,30 @@
 
   useMainButton(mainButtonOptions, async () => {
     try {
-        if(name.value != undefined && gender.value != undefined && lookingFor.value != undefined){
-            const profile = await addProfile({
-                userId: userId.value,
-                profile: new Profile({
-                  id: userId.value,
-                  username: username.value,
-                  name: name.value,
-                  gender: gender.value,
-                  photos: [],
-                  bio: bio.value,
-                  dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-                  lookingFor: lookingFor.value,
-                  searchingPointer: searchingPointer.value, 
-                  likes: likes.value,
-                  matches: matches.value
-            })});
-            postEvent('web_app_data_send', { data: JSON.stringify(profile) });
-            postEvent('web_app_close');
-        }
+      if (
+        name.value != undefined &&
+        gender.value != undefined &&
+        lookingFor.value != undefined
+      ) {
+        const profile = await addProfile({
+          userId: userId.value,
+          profile: new Profile({
+            id: userId.value,
+            username: username.value,
+            name: name.value,
+            gender: gender.value,
+            photos: [],
+            bio: bio.value,
+            dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+            lookingFor: lookingFor.value,
+            searchingPointer: searchingPointer.value,
+            likes: likes.value,
+            matches: matches.value,
+          }),
+        });
+        postEvent('web_app_data_send', { data: JSON.stringify(profile) });
+        postEvent('web_app_close');
+      }
     } catch (e) {
       console.error(e);
     }
@@ -167,14 +174,13 @@
   </div>
   <div class="footer">
     <VProfileCardView
-        :photos="photos"
-        :name="name"
-        :gender="gender"
-        :age="age"
-        :lookingFor="lookingFor"
-        :bio="bio"
-        :isProfile="true"
-      />
+      :photos="photos"
+      :name="name"
+      :gender="gender"
+      :age="age"
+      :lookingFor="lookingFor"
+      :bio="bio"
+      :isProfile="true" />
     <div class="block has-text-centered">
       Вот так будет выглядеть ваш профиль для соискателей
     </div>
