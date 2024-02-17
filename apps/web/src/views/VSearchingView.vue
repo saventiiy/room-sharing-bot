@@ -120,7 +120,7 @@
         />
       </div>
       <div class="buttons-wrapper">
-        <button class="button full-height" @click="nextUser">С</button>
+        <button class="button full-height" @click="nextUser">👎</button>
         <div class="spacer">
           <div v-if="isShowProfile === false">
             <div class="card">
@@ -162,7 +162,7 @@
             </div>
           </div>
         </div>
-        <button class="button full-height" @click="likeUser">Л</button>
+        <button class="button full-height" @click="likeUser">❤️‍🔥</button>
       </div>
     </div>
   </div>
