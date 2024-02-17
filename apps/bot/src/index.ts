@@ -9,7 +9,7 @@ import {
   newUserOnboardingScene,
   NEW_USER_ONBOARDING_SCENE,
 } from './scenes/newUserOnboardingScene';
-import { mainScene } from './scenes/mainScene';
+import { MAIN_SCENE, mainScene } from './scenes/mainScene';
 import { newRoomOnboardingScene } from './scenes/newRoomOnboardingScene';
 import { EDIT_SCENE, editScene } from './scenes/editScene';
 
@@ -39,6 +39,10 @@ bot.on('message', (ctx) => {
   console.log('pong:', ctx.message);
   if(ctx.message.text == 'Редактировать профиль'){
     ctx.scene.enter(EDIT_SCENE);
+  } else if(ctx.message.text === 'Назад'){
+    ctx.scene.enter(MAIN_SCENE);
+  } else if(ctx.message.text === 'Помощь'){
+    ctx.reply('Если вам нужна помощь напишите нам');
   }
 });
 

@@ -42,6 +42,13 @@ editScene.on(message('web_app_data'), async (ctx) => {
   }
 });
 
-editScene.on('message', defaultReply);
+editScene.on('message', (ctx) => {
+ if(ctx.message.text === 'Назад'){
+    ctx.scene.enter(MAIN_SCENE);
+  } else {
+    defaultReply;
+  }
+});
+
 
 export { editScene, EDIT_SCENE };

@@ -10,7 +10,7 @@ const returningUserOnboardingScene = new Scenes.BaseScene<Scenes.SceneContext>(
 returningUserOnboardingScene.enter((ctx) => {
   console.log(`Entering ${RETURNING_USER_ONBOARDING_SCENE}`);
   ctx.reply(
-    'Здраствуйте! У вас уже есть профиль, нажмите "Профиль" чтобы посмотреть его.',
+    'Здраствуйте! У вас уже есть профиль, нажмите "Редактировать профиль" чтобы посмотреть его.',
   );
   ctx.scene.enter(MAIN_SCENE);
 });

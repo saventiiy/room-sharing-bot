@@ -3,6 +3,7 @@ import { LookingFor } from 'types';
 
 export const editMenu = (lookingFor: LookingFor, hasRoom: boolean, ctx: Context) => {
   const buttons = [
+    Markup.button.text('Назад'),
     Markup.button.webApp(
       'Редактировать профиль',
       `${process.env.WEB_APP_URL}/editProfile/${ctx.from?.id}/${ctx.from?.username}`,
