@@ -64,12 +64,13 @@
 
   const file = ref<File>();
 
-  useMainButton(mainButtonOptions, async () => {
+  const saveProfile = async () => {
     try {
       if (
         name.value != undefined &&
         gender.value != undefined &&
-        lookingFor.value != undefined
+        lookingFor.value != undefined &&
+        file.value != undefined
       ) {
         const profile = await addProfile({
           userId: userId.value,
@@ -87,25 +88,27 @@
             matches: matches.value,
           }),
         });
+        uploadFile(file.value, file.value?.name);
         postEvent('web_app_data_send', { data: JSON.stringify(profile) });
         postEvent('web_app_close');
       }
     } catch (e) {
       console.error(e);
     }
-  });
+  };
+
+  useMainButton(mainButtonOptions, saveProfile);
 
   const onFileChanged = ($event: Event) => {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
       file.value = target.files[0];
     }
-
-    file.value && uploadFile(file.value, file.value?.name);
   };
 </script>
 
 <template>
+  <button @click="saveProfile">Save</button>
   <section class="hero is-small has-text-centered">
     <div class="hero-body">
       <p class="title">Измените профиль</p>
