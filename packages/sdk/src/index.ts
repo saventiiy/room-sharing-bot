@@ -300,6 +300,7 @@ export const getPhotos = async (userId: string, type: string) => {
 };
 
 export const uploadFile = async (file: Blob | File, name: string) => {
+  console.log('uploadFile', file);
   const storage = getStorage();
   const storageRef = ref(storage, name);
 
