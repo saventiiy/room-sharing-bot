@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { Districts, Room } from 'types';
+  import { Districts, Room, PhotoType } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
-  import { addRoom } from 'sdk';
+  import { addRoom, saveMultiplePhotosForProfile } from 'sdk';
   import { postEvent } from '@tma.js/sdk';
   import VProfileCardView from './VProfileCardView.vue';
 
@@ -12,8 +12,14 @@
   const price = ref(1000);
   const { textarea, input: description } = useTextareaAutosize();
 
+  const userId = useRouteParams<string>('userId');
+
+  const photos = ref<string[]>([]);
+  const files = ref<File[]>([]);
+
   const isValid = computed(() => {
     return !!(
+      files.value.length > 0 &&
       address.value.length > 0 &&
       description.value &&
       description.value.length > 0 &&
@@ -27,7 +33,6 @@
     is_active: isValid.value,
   }));
 
-  const userId = useRouteParams<string>('userId');
   useMainButton(mainButtonOptions, async () => {
     try {
       const room = await addRoom({
@@ -42,12 +47,23 @@
           likes: []
         }),
       });
+      await saveMultiplePhotosForProfile(userId.value, PhotoType.Room, files.value);
       postEvent('web_app_data_send', { data: JSON.stringify(room) });
       postEvent('web_app_close');
     } catch (e) {
       console.error(e);
     }
   });
+
+  const onFileChanged = ($event: Event) => {
+    const target = $event.target as HTMLInputElement;
+    if (target && target.files) {
+      for (let i = 0; i < target.files.length; i++) {
+        files.value.push(target.files[i]);
+        photos.value.push(URL.createObjectURL(target.files[i]));
+      }
+    }
+  };
 </script>
 
 <template>
@@ -79,6 +95,15 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Добавьте фотографии комнаты</label>
+        <input
+        type="file"
+        @change="onFileChanged($event)"
+        accept="image/*"
+        capture 
+        />
+      </div>
+      <div class="field">
         <label class="label">Описание</label>
         <div class="control">
           <textarea ref="textarea" v-model="description" class="textarea"></textarea>
@@ -89,6 +114,7 @@
   </div>
   <div class="footer">
     <VProfileCardView
+      :photos="photos"
       :address="address"
       :district="district"
       :price="price"

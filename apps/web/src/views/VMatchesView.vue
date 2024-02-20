@@ -1,30 +1,33 @@
 <script lang="ts" setup>
-  import { getMatched } from 'sdk';
-  import { getAge } from 'types';
+  import { getMatched, getPhotos } from 'sdk';
+  import { getAge, LookingFor, PhotoType } from 'types';
   import { ref, onMounted } from 'vue';
   import type { PotentialData } from 'types';
   import VProfileCardView from './VProfileCardView.vue';
 
   const userId = useRouteParams<string>('userId');
-  const dataList = ref<PotentialData[]>([]);
+  const dataList = ref<{potentialData: PotentialData; profilePhotos: string[]; roomPhotos: string[]}[]>([]);
 
   onMounted(async () => {
-    try {
-      const potentialData = await getMatched(userId.value);
-      potentialData.forEach((item) => {
-        dataList.value.push(item);
-      });
-    } catch (err) {
-      console.error(err);
+  try {
+    const mathedList = await getMatched(userId.value);
+    for (const match of mathedList) {
+      if(match){
+        const profilePhotos = await getPhotos(
+          match.profile!.id,
+          PhotoType.Profile
+        );
+        const roomPhotos = await getPhotos(
+          match.profile!.id,
+          PhotoType.Room
+        ); 
+      dataList.value.push({ potentialData: { profile: match.profile, room: match.room }, profilePhotos: profilePhotos, roomPhotos: roomPhotos });
+      }
     }
-  });
-
-  const photos = [
-    { url: "https://disgustingmen.com/wp-content/uploads/2021/06/kerouac_l_min.jpeg"},
-    { url: "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/871cba08-800e-4c77-8123-ab768799f680/220x330" },
-    { url: "https://artifex.ru/wp-content/uploads/2020/10/%D0%94%D0%B6%D0%B5%D0%BA-%D0%9A%D0%B5%D1%80%D1%83%D0%B0%D0%BA-%D0%A4%D0%BE%D1%82%D0%BE-4.jpeg"}
-  ];
-
+  } catch (err) {
+    console.error(err);
+  }
+});
 </script>
 
 <template>
@@ -37,24 +40,24 @@
   </div>
   <div class="container">
     <div v-for="(data, index) in dataList" :key="index" class="card m-4">
-      <div v-if="data.profile">
+      <div v-if="data.potentialData.profile">
         <VProfileCardView
-          :photos="photos"
-          :name="data.profile.name"
-          :gender="data.profile.gender"
-          :age="getAge(data.profile.dateofbirth)"
-          :lookingFor="data.profile.lookingFor"
-          :bio="data.profile.bio"
+          :photos="data.profilePhotos"
+          :name="data.potentialData.profile.name"
+          :gender="data.potentialData.profile.gender"
+          :age="getAge(data.potentialData.profile.dateofbirth)"
+          :lookingFor="data.potentialData.profile.lookingFor"
+          :bio="data.potentialData.profile.bio"
           :isProfile="true"
         />
       </div>
-      <template v-if="data.room">
+      <template v-if="data.potentialData.room">
         <VProfileCardView
-          :photos="photos"
-          :address="data.room.address"
-          :district="data.room.district"
-          :price="data.room.price"
-          :description="data.room.description"
+          :photos="data.roomPhotos"
+          :address="data.potentialData.room.address"
+          :district="data.potentialData.room.district"
+          :price="data.potentialData.room.price"
+          :description="data.potentialData.room.description"
           :isProfile="false"
         />
       </template>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
-  import { addProfile, getProfile, getPhotos } from 'sdk';
-  import { Profile, Gender, LookingFor, getAge } from 'types';
+  import { addProfile, getProfile, getPhotos, saveMultiplePhotosForProfile} from 'sdk';
+  import { Profile, Gender, LookingFor, getAge, PhotoType } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
@@ -9,7 +9,6 @@
   import { type MainButtonConfig } from '@/composables/useMainButton';
   import { ref, watch, computed } from 'vue';
   import VProfileCardView from './VProfileCardView.vue';
-  import { uploadFile } from 'sdk';
 
   const userId = useRouteParams<string>('userId');
   const username = useRouteParams<string>('username');
@@ -22,13 +21,13 @@
   const likes = ref<string[]>([]);
   const matches = ref<string[]>([]);
   const photos = ref<string[]>([]);
+  const files = ref<File[]>([]);
 
-  onMounted(() => {
     watch(
       userId,
       async (newUserId) => {
         try {
-          photos.value = await getPhotos(userId.value, 'profiles');
+          photos.value = await getPhotos(userId.value, PhotoType.Profile);
           const userProfile = await getProfile(newUserId);
           name.value = userProfile?.name || '';
           age.value = getAge(userProfile?.dateofbirth);
@@ -44,10 +43,10 @@
       },
       { immediate: true },
     );
-  });
 
   const isValid = computed(() => {
     return !!(
+      files.value.length > 0 &&
       name.value.length > 0 &&
       bio.value &&
       bio.value.length > 0 &&
@@ -61,15 +60,14 @@
     text: name.value,
     is_active: isValid.value,
   }));
-
-  const file = ref<File>();
-
+  
   useMainButton(mainButtonOptions, async () => {
     try {
       if (
-        name.value != undefined &&
-        gender.value != undefined &&
-        lookingFor.value != undefined
+        name.value !== undefined &&
+        gender.value !== undefined &&
+        lookingFor.value !== undefined &&
+        files.value.length !== 0
       ) {
         const profile = await addProfile({
           userId: userId.value,
@@ -87,6 +85,7 @@
             matches: matches.value,
           }),
         });
+        await saveMultiplePhotosForProfile(userId.value, PhotoType.Profile, files.value);
         postEvent('web_app_data_send', { data: JSON.stringify(profile) });
         postEvent('web_app_close');
       }
@@ -95,13 +94,15 @@
     }
   });
 
+  //maybe it could be possible to use only files without photos
   const onFileChanged = ($event: Event) => {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
-      file.value = target.files[0];
+      for (let i = 0; i < target.files.length; i++) {
+        files.value.push(target.files[i]);
+        photos.value.push(URL.createObjectURL(target.files[i]));
+      }
     }
-
-    file.value && uploadFile(file.value, file.value?.name);
   };
 </script>
 
@@ -113,11 +114,6 @@
   </section>
   <div class="container is-fluid">
     <div class="block">
-      <input
-        type="file"
-        @change="onFileChanged($event)"
-        accept="image/*"
-        capture />
       <div class="field">
         <label class="label">Имя</label>
         <div class="control">
@@ -179,6 +175,15 @@
             Соседа
           </label>
         </div>
+      </div>
+      <div class="field">
+        <label class="label">Добавьте фотографии профиля</label>
+        <input
+        type="file"
+        @change="onFileChanged($event)"
+        accept="image/*"
+        capture 
+        />
       </div>
       <div class="field">
         <label class="label">О себе</label>

@@ -5,6 +5,8 @@ const props = defineProps({
   photos: Array<String>
 });
 
+const defaultPhoto = "https://firebasestorage.googleapis.com/v0/b/roomsharebot.appspot.com/o/851550b70f917bb.png?alt=media&token=63f3de4b-dee3-4079-8f80-88a79e2f34fe"
+
 const currentPhotoIndex = ref(0);
 
 const nextPhoto = () => {
@@ -18,15 +20,25 @@ const prevPhoto = () => {
 
 <template>
   <div class="slider">
-    <div class="slide" v-for="(photo, index) in photos" :key="index" :class="{ active: index === currentPhotoIndex }">
+    <template v-if="photos && photos.length > 0">
+      <div class="slide" v-for="(photo, index) in photos" :key="index" :class="{ active: index === currentPhotoIndex }">
       <figure class="image is-flex is-align-items-center is-justify-content-center is-4by3">
-        <img :src="photo.url" alt="Slide"/>
+        <img :src="photo" alt="Slide"/>
       </figure>
     </div>
-    <div class="controls">
+    </template>
+    <template v-else>
+      <figure class="image is-flex is-align-items-center is-justify-content-center is-4by3">
+        <img :src="defaultPhoto" alt="Slide"/>
+      </figure>
+    </template>
+
+    <template v-if="photos!.length > 1">
+      <div class="controls">
       <button @click="prevPhoto">&lt;</button>
       <button @click="nextPhoto">&gt;</button>
     </div>
+    </template>
   </div>   
 </template>
 

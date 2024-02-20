@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
-  import { addProfile } from 'sdk';
-  import { Profile, Gender, LookingFor } from 'types';
+  import { addProfile, saveMultiplePhotosForProfile } from 'sdk';
+  import { Profile, Gender, LookingFor, PhotoType } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
@@ -14,9 +14,12 @@
   const gender = ref(Gender.Male);
   const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
+  const photos = ref<string[]>([]);
+  const files = ref<File[]>([]);
 
   const isValid = computed(() => {
     return !!(
+      files.value.length > 0 &&
       name.value.length > 0 &&
       bio.value &&
       bio.value.length > 0 &&
@@ -52,12 +55,22 @@
           matches: [],
         }),
       });
+      await saveMultiplePhotosForProfile(userId.value, PhotoType.Profile, files.value);
       postEvent('web_app_data_send', { data: JSON.stringify(profile) });
       postEvent('web_app_close');
     } catch (e) {
       console.error(e);
     }
   });
+  const onFileChanged = ($event: Event) => {
+    const target = $event.target as HTMLInputElement;
+    if (target && target.files) {
+      for (let i = 0; i < target.files.length; i++) {
+        files.value.push(target.files[i]);
+        photos.value.push(URL.createObjectURL(target.files[i]));
+      }
+    }
+  };
 </script>
 
 <template>
@@ -131,6 +144,15 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Добавьте фотографии профиля</label>
+        <input
+        type="file"
+        @change="onFileChanged($event)"
+        accept="image/*"
+        capture 
+        />
+      </div>
+      <div class="field">
         <label class="label">О себе</label>
         <div class="control">
           <textarea ref="textarea" v-model="bio" class="textarea"></textarea>
@@ -141,12 +163,13 @@
   </div>
   <div class="footer">
     <VProfileCardView
+      :photos="photos"
       :name="name"
       :gender="gender"
       :age="age"
       :lookingFor="lookingFor"
       :bio="bio"
-      :isProfile="true "
+      :isProfile="true"
     />
     <div class="block has-text-centered">
       Вот так будет выглядеть ваш профиль для соискателей

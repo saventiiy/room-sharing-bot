@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { Districts, Room } from 'types';
+  import { Districts, PhotoType, Room } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
-  import { addRoom, getRoom } from 'sdk';
+  import { addRoom, getRoom, saveMultiplePhotosForProfile, getPhotos } from 'sdk';
   import { postEvent } from '@tma.js/sdk';
   import VProfileCardView from './VProfileCardView.vue';
 
@@ -12,10 +12,12 @@
   const district = ref(Districts.Bemowo);
   const price = ref(1000);
   const { textarea, input: description } = useTextareaAutosize();
+  const photos = ref<string[]>([]);
+  const files = ref<File[]>([]);
 
-  onMounted(() => {
     watch(userId, async (newUserId) => {
       try {
+        photos.value = await getPhotos(userId.value, PhotoType.Room);
         const roomProfile = await getRoom(newUserId);
         address.value = roomProfile?.address || '';
         district.value = roomProfile?.district || Districts.Bemowo;
@@ -24,12 +26,11 @@
       } catch (err) {
         console.error(err);
       }
-    }, 
-    { immediate: true });  
-  });
+    });
 
   const isValid = computed(() => {
     return !!(
+      files.value.length > 0 &&
       address.value.length > 0 &&
       description.value &&
       description.value.length > 0 &&
@@ -57,12 +58,23 @@
           likes: []
         }),
       });
+      await saveMultiplePhotosForProfile(userId.value, PhotoType.Room, files.value);
       postEvent('web_app_data_send', { data: JSON.stringify(room) });
       postEvent('web_app_close');
     } catch (e) {
       console.error(e);
     }
   });
+
+  const onFileChanged = ($event: Event) => {
+    const target = $event.target as HTMLInputElement;
+    if (target && target.files) {
+      for (let i = 0; i < target.files.length; i++) {
+        files.value.push(target.files[i]);
+        photos.value.push(URL.createObjectURL(target.files[i]));
+      }
+    }
+  };
 </script>
 
 <template>
@@ -94,6 +106,15 @@
         </div>
       </div>
       <div class="field">
+        <label class="label">Добавьте фотографии комнаты</label>
+        <input
+        type="file"
+        @change="onFileChanged($event)"
+        accept="image/*"
+        capture 
+        />
+      </div>
+      <div class="field">
         <label class="label">Описание</label>
         <div class="control">
           <textarea ref="textarea" v-model="description" class="textarea"></textarea>
@@ -104,6 +125,7 @@
   </div>
   <div class="footer">
     <VProfileCardView
+      :photos="photos"
       :address="address"
       :district="district"
       :price="price"

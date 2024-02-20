@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { getPotentialUser, like } from 'sdk';
-  import { Gender, LookingFor, getAge, Districts } from 'types';
+  import { getPotentialUser, like, getPhotos } from 'sdk';
+  import { Gender, LookingFor, getAge, Districts, PhotoType } from 'types';
   import { ref, onMounted, watch } from 'vue';
   import VSliderView from './VSliderView.vue';
 
@@ -23,11 +23,7 @@
   const isAllProfilesShowed = ref(true);
   const allProfilesShowed = ref('Вы просмотрели все профили');
 
-  const photos = [
-    { url: "https://disgustingmen.com/wp-content/uploads/2021/06/kerouac_l_min.jpeg"},
-    { url: "https://avatars.mds.yandex.net/get-kinopoisk-image/1704946/871cba08-800e-4c77-8123-ab768799f680/220x330" },
-    { url: "https://artifex.ru/wp-content/uploads/2020/10/%D0%94%D0%B6%D0%B5%D0%BA-%D0%9A%D0%B5%D1%80%D1%83%D0%B0%D0%BA-%D0%A4%D0%BE%D1%82%D0%BE-4.jpeg"}
-  ];
+  const photos = ref<{profilePhoto: string[]; roomPhoto: string[]}>({profilePhoto: [], roomPhoto: []});
 
   watch(isMatch, (newValue) => {
     if (newValue) {
@@ -65,6 +61,11 @@
           district.value = potentialData.room.district;
           price.value = potentialData.room.price;
           description.value = potentialData.room.description;
+
+          const profilePhotos = await getPhotos(potentialData.profile.id, PhotoType.Profile);
+          const roomPhotos = await getPhotos(potentialData.profile.id, PhotoType.Room);
+          photos.value = { profilePhoto: profilePhotos, roomPhoto: roomPhotos };
+
       } else if(potentialData.profile != undefined && potentialData.room == undefined) {
           name.value = potentialData.profile.name || '';
           age.value = getAge(potentialData.profile.dateofbirth);
@@ -73,6 +74,8 @@
           bio.value = potentialData.profile.bio || '';
           
           likedUserId.value = potentialData.profile.id;
+          const profilePhotos = await getPhotos(potentialData.profile.id, PhotoType.Profile);
+          photos.value = { profilePhoto: profilePhotos, roomPhoto: [] };
       } else {
           name.value = '';
       }
@@ -87,6 +90,8 @@
 
   const likeUser = async () => {
     try {
+      photos.value = { profilePhoto: [], roomPhoto: [] };
+
       isMatch.value = await like(userId.value, likedUserId.value);
       await loadUser();
     } catch (err) {
@@ -96,6 +101,8 @@
 
   const nextUser = async () => {
     try {
+      photos.value = { profilePhoto: [], roomPhoto: [] };
+
       await loadUser();
     } catch (err) {
       console.error(err);
@@ -114,11 +121,16 @@
   <div v-else>
     <div v-if="isMatch" class="notification is-success">{{ matchNotification }}</div>
     <div class="container">
-      <div class="card-image">
+      <template v-if="address === '' || isShowProfile">
         <VSliderView
-          :photos="photos"
+          :photos="photos.profilePhoto"
         />
-      </div>
+      </template>
+      <template v-else>
+        <VSliderView
+          :photos="photos.roomPhoto"
+        />
+      </template>
       <div class="buttons-wrapper">
         <button class="button full-height" @click="nextUser">👎</button>
         <div class="spacer">
