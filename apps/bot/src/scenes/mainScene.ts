@@ -1,5 +1,6 @@
 import { Scenes } from 'telegraf';
 import { mainMenu } from '../menus/mainMenu';
+import { EDIT_SCENE } from './editScene';
 
 const MAIN_SCENE = 'mainScene';
 

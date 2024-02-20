@@ -1,21 +1,48 @@
 <script lang="ts" setup>
   import { postEvent } from '@tma.js/sdk';
-  import { addProfile, saveMultiplePhotosForProfile } from 'sdk';
-  import { Profile, Gender, LookingFor, PhotoType } from 'types';
+  import { addProfile, getProfile, getPhotos, saveMultiplePhotosForProfile} from 'sdk';
+  import { Profile, Gender, LookingFor, getAge, PhotoType } from 'types';
   import { useTextareaAutosize } from '@vueuse/core';
   import { getTimestamp } from 'firebase-utils';
   import dayjs from 'dayjs';
   import { useMainButton } from '@/composables/useMainButton';
   import { type MainButtonConfig } from '@/composables/useMainButton';
+  import { ref, watch, computed } from 'vue';
   import VProfileCardView from './VProfileCardView.vue';
 
+  const userId = useRouteParams<string>('userId');
+  const username = useRouteParams<string>('username');
   const name = ref('');
   const age = ref(18);
   const gender = ref(Gender.Male);
   const lookingFor = ref(LookingFor.Room);
   const { textarea, input: bio } = useTextareaAutosize();
+  const searchingPointer = ref(0);
+  const likes = ref<string[]>([]);
+  const matches = ref<string[]>([]);
   const photos = ref<string[]>([]);
   const files = ref<File[]>([]);
+
+    watch(
+      userId,
+      async (newUserId) => {
+        try {
+          photos.value = await getPhotos(userId.value, PhotoType.Profile);
+          const userProfile = await getProfile(newUserId);
+          name.value = userProfile?.name || '';
+          age.value = getAge(userProfile?.dateofbirth);
+          gender.value = userProfile?.gender || Gender.Other;
+          lookingFor.value = userProfile?.lookingFor || LookingFor.Room;
+          bio.value = userProfile?.bio || '';
+          searchingPointer.value = userProfile?.searchingPointer || 0;
+          likes.value = userProfile?.likes || [];
+          matches.value = userProfile?.matches || [];
+        } catch (err) {
+          console.error(err);
+        }
+      },
+      { immediate: true },
+    );
 
   const isValid = computed(() => {
     return !!(
@@ -33,35 +60,42 @@
     text: name.value,
     is_active: isValid.value,
   }));
-
-  const userId = useRouteParams<string>('userId');
-  const username = useRouteParams<string>('username');
-
+  
   useMainButton(mainButtonOptions, async () => {
     try {
-      const profile = await addProfile({
-        userId: userId.value,
-        profile: new Profile({
-          id: userId.value,
-          username: username.value,
-          name: name.value,
-          gender: gender.value,
-          photos: [],
-          bio: bio.value,
-          dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
-          lookingFor: lookingFor.value,
-          searchingPointer: 0,
-          likes: [],
-          matches: [],
-        }),
-      });
-      await saveMultiplePhotosForProfile(userId.value, PhotoType.Profile, files.value);
-      postEvent('web_app_data_send', { data: JSON.stringify(profile) });
-      postEvent('web_app_close');
+      if (
+        name.value !== undefined &&
+        gender.value !== undefined &&
+        lookingFor.value !== undefined &&
+        files.value !== undefined &&
+        files.value.length !== 0
+      ) {
+        const profile = await addProfile({
+          userId: userId.value,
+          profile: new Profile({
+            id: userId.value,
+            username: username.value,
+            name: name.value,
+            gender: gender.value,
+            photos: [],
+            bio: bio.value,
+            dateofbirth: getTimestamp(dayjs().subtract(age.value, 'year')),
+            lookingFor: lookingFor.value,
+            searchingPointer: searchingPointer.value,
+            likes: likes.value,
+            matches: matches.value,
+          }),
+        });
+        await saveMultiplePhotosForProfile(userId.value, PhotoType.Profile, files.value);
+        postEvent('web_app_data_send', { data: JSON.stringify(profile) });
+        postEvent('web_app_close');
+      }
     } catch (e) {
       console.error(e);
     }
   });
+
+  //maybe it could be possible to use only files without photos
   const onFileChanged = ($event: Event) => {
     const target = $event.target as HTMLInputElement;
     if (target && target.files) {
@@ -76,7 +110,7 @@
 <template>
   <section class="hero is-small has-text-centered">
     <div class="hero-body">
-      <p class="title">Заполните ваш профиль</p>
+      <p class="title">Измените профиль</p>
     </div>
   </section>
   <div class="container is-fluid">
@@ -169,8 +203,7 @@
       :age="age"
       :lookingFor="lookingFor"
       :bio="bio"
-      :isProfile="true"
-    />
+      :isProfile="true" />
     <div class="block has-text-centered">
       Вот так будет выглядеть ваш профиль для соискателей
     </div>

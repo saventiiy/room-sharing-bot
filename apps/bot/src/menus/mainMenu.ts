@@ -6,19 +6,17 @@ export const mainMenu = (ctx: Context) =>
       ? [
           [
             Markup.button.webApp(
-              'Профиль',
-              `${process.env.WEB_APP_URL}/profiles/${ctx.from.id}`,
+              'Поиск',
+              `${process.env.WEB_APP_URL}/searching/${ctx.from.id}`,
             ),
-            Markup.button.webApp(
-              'Объявление',
-              `${process.env.WEB_APP_URL}/listings/${ctx.from.id}`,
-            ),
-          ],
-          [
             Markup.button.webApp(
               'Мэтчи',
               `${process.env.WEB_APP_URL}/matches/${ctx.from.id}`,
-            ),
+            )
+          ],
+          [
+            Markup.button.text('Редактировать профиль'),
+            Markup.button.text('Помощь')
           ],
         ]
       : [],

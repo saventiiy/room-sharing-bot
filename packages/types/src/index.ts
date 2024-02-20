@@ -1,11 +1,16 @@
 import type { Timestamp } from 'firebase/firestore';
-import { getId } from 'utils';
 import { BaseDocument, getTimestamp } from 'firebase-utils';
+import dayjs from 'dayjs';
 
 export enum Gender {
   Male = 'Male',
   Female = 'Female',
   Other = 'Other',
+}
+
+export enum LookingFor {
+  Room = 'Room',
+  Flatmate = 'Flatmate',
 }
 
 export enum Districts {
@@ -26,44 +31,95 @@ export enum Districts {
   Zoliborz = 'Zoliborz',
 }
 
+export enum PhotoType {
+  Profile = 'profile',
+  Room = 'room'
+}
+
+export interface Viewed extends BaseDocument {
+  id: string;
+  viewedIds: string[];
+}
+
+export class Viewed extends BaseDocument implements Viewed {
+  constructor({
+    id, 
+    viewedIds = [],
+    createdAt = getTimestamp(),
+    updatedAt = getTimestamp()
+  }: {
+    id: string;
+    createdAt?: Timestamp;
+    updatedAt?: Timestamp;
+    viewedIds: string[];
+  }){
+    super({ createdAt, updatedAt });
+    this.id = id;
+    this.viewedIds = viewedIds;
+  }
+}
+
 export interface Profile extends BaseDocument {
+  id: string;
+  username: string;
   name: string;
   dateofbirth: Timestamp;
   gender: Gender;
   photos: string[];
   bio: string;
+  lookingFor: LookingFor;
+  searchingPointer: number;
+  likes: string[];
+  matches: string[];
 }
 
 export class Profile extends BaseDocument implements Profile {
   constructor({
-    id = getId(),
+    id,
     createdAt = getTimestamp(),
     updatedAt = getTimestamp(),
+    username,
     name,
     dateofbirth,
     gender,
     photos = [],
     bio,
+    lookingFor,
+    searchingPointer,
+    likes = [],
+    matches = [],
   }: {
-    id?: string;
+    id: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
+    username: string;
     name: string;
     dateofbirth: Timestamp;
     gender: Gender;
     photos: string[];
     bio: string;
+    lookingFor: LookingFor;
+    searchingPointer: number;
+    likes: string[];
+    matches: string[];
   }) {
-    super({ id, createdAt, updatedAt });
+    super({ createdAt, updatedAt });
+    this.id = id;
+    this.username = username;
     this.name = name;
     this.dateofbirth = dateofbirth;
     this.gender = gender;
     this.photos = photos;
     this.bio = bio;
+    this.lookingFor = lookingFor;
+    this.searchingPointer = searchingPointer;
+    this.likes = likes;
+    this.matches = matches;
   }
 }
 
 export interface Room extends BaseDocument {
+  id: string;
   address: string;
   district: Districts;
   photos: string[];
@@ -74,7 +130,7 @@ export interface Room extends BaseDocument {
 
 export class Room extends BaseDocument implements Room {
   constructor({
-    id = getId(),
+    id,
     createdAt = getTimestamp(),
     updatedAt = getTimestamp(),
     address,
@@ -84,7 +140,7 @@ export class Room extends BaseDocument implements Room {
     price,
     likes = [],
   }: {
-    id?: string;
+    id: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
     address: string;
@@ -94,7 +150,8 @@ export class Room extends BaseDocument implements Room {
     price: number;
     likes: string[];
   }) {
-    super({ id, createdAt, updatedAt });
+    super({ createdAt, updatedAt });
+    this.id = id;
     this.address = address;
     this.district = district;
     this.photos = photos;
@@ -104,27 +161,15 @@ export class Room extends BaseDocument implements Room {
   }
 }
 
-export interface Roommate extends BaseDocument {
-  description: string;
-  likes: string[];
+export interface PotentialData {
+  profile: Profile | null;
+  room: Room | null;
 }
 
-export class Roommate extends BaseDocument implements Roommate {
-  constructor({
-    id = getId(),
-    createdAt = getTimestamp(),
-    updatedAt = getTimestamp(),
-    description,
-    likes = [],
-  }: {
-    id?: string;
-    createdAt?: Timestamp;
-    updatedAt?: Timestamp;
-    description: string;
-    likes: string[];
-  }) {
-    super({ id, createdAt, updatedAt });
-    this.description = description;
-    this.likes = likes;
-  }
-}
+//is it ok, to move it here?
+// i needed a fb modules
+export const getAge = (birthDate: Timestamp) => {
+  const currentDate = dayjs();
+  const bDay = dayjs.unix(birthDate.seconds);
+  return Math.floor(currentDate.diff(bDay, 'year', true));;
+};
