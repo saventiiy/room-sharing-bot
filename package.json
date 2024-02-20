@@ -4,5 +4,8 @@
   },
   "devDependencies": {
     "turbo": "^1.11.3"
+  },
+  "dependencies": {
+    "compressorjs": "^1.2.1"
   }
 }

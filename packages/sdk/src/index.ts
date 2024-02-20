@@ -19,6 +19,7 @@ import {
   ref,
   uploadBytes,
 } from 'firebase/storage';
+import Compressor from 'compressorjs';
 
 const PROFILE_COLLECTION = 'profiles';
 const ROOM_COLLECTION = 'rooms';
@@ -105,15 +106,23 @@ export const getPotentialUser = async (currentUserId: string) => {
   );
 
   const querySnapshot = await getDocs(dbQuery);
+  //added to show 
   const potentialUsers = querySnapshot.docs
-    .map((doc) => doc.data() as Profile)
-    .filter(
-      (potentialUser) =>
-        potentialUser.id !== profile?.id &&
-        !viewedProfiles?.viewedIds.includes(potentialUser.id) &&
-        !profile?.likes.includes(potentialUser.id) &&
-        !profile?.matches.includes(potentialUser.id),
-    );
+  .map((doc) => doc.data() as Profile)
+  .filter((potentialUser) => {
+    const notCurrentUser = potentialUser.id !== profile?.id;
+
+    let matchingLookingFor = true;
+    if (profile?.lookingFor === LookingFor.Flatmate) {
+      matchingLookingFor = potentialUser.lookingFor === LookingFor.Room;
+    }
+
+    const notViewed = !viewedProfiles?.viewedIds.includes(potentialUser.id);
+    const notLiked = !profile?.likes.includes(potentialUser.id);
+    const notMatched = !profile?.matches.includes(potentialUser.id);
+
+    return notCurrentUser && matchingLookingFor && notViewed && notLiked && notMatched;
+  });
 
   if (
     potentialUsers.length > 0 &&
@@ -181,7 +190,7 @@ export const getMatched = async (userId: string) => {
         };
         if (
           matchedProfile != undefined &&
-          matchedProfile.lookingFor == LookingFor.Flatmate
+          matchedProfile.lookingFor === LookingFor.Flatmate
         ) {
           const room = await getRoom(matchedProfile.id);
           potentialData.room = room;
@@ -234,23 +243,43 @@ export const saveMultiplePhotosForProfile = async (
   files: File[],
 ) => {
   const storage = getStorage();
-  const storageRef = ref(storage, `${type}/${userId}`);
+  const storageRef = ref(storage, `${type}s/${userId}`);
 
-  if (files !== null && files !== undefined && files.length !== 0) {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const filePath = `${i}_${file.name}`;
+  if (files && files.length !== 0) {
+    await Promise.all(files.map(async (file, index) => {
+      const filePath = `${index}_${file.name}`;
       const fileRef = ref(storageRef, filePath);
-      uploadBytes(fileRef, file).then(() => {
-        console.log('Uploaded');
+      const compressedFile = await compress(file);
+      if(compressedFile){
+        return await uploadBytes(fileRef, compressedFile!);
+      } else {
+        return await uploadBytes(fileRef, file);
+      }
+    }));
+  }
+};
+
+const compress = async (file: File) => {
+  try {
+    const compressedFile = await new Promise((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.6,
+        maxWidth: 800,
+        maxHeight: 600,
+        success: (result) => resolve(result),
+        error: (err) => reject(err),
       });
-    }
+    });
+    return compressedFile as File;
+  } catch (error) {
+    console.error('Error compressing:', error);
+    return null;
   }
 };
 
 export const getPhotos = async (userId: string, type: string) => {
-  const storage = getStorage(firebaseApp, 'gs://roomsharebot.appspot.com');
-  const storageRef = ref(storage, `${type}/${userId}`);
+  const storage = getStorage();
+  const storageRef = ref(storage, `${type}s/${userId}`);
   const photoUrls: string[] = [];
 
   try {
