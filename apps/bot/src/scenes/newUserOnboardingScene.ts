@@ -28,7 +28,7 @@ newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
   const profile: Profile | undefined = ctx.webAppData?.data.json();
   ctx.reply(JSON.stringify(profile, null, 2));
 
-  if (profile != undefined && profile.lookingFor == LookingFor.Flatmate) {
+  if (profile != undefined && profile.lookingFor === LookingFor.Flatmate) {
     ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
   } else {
     ctx.scene.enter(MAIN_SCENE);

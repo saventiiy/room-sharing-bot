@@ -10,7 +10,7 @@ export const editMenu = (lookingFor: LookingFor, hasRoom: boolean, ctx: Context)
     ),
   ];
 
-  if (lookingFor == LookingFor.Flatmate && hasRoom) {
+  if (lookingFor === LookingFor.Flatmate && hasRoom) {
     buttons.push(
       Markup.button.webApp(
         'Редактировать комнату',

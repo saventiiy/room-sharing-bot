@@ -37,7 +37,7 @@ bot.start(async (ctx) => {
 
 bot.on('message', (ctx) => {
   console.log('pong:', ctx.message);
-  if(ctx.message.text == 'Редактировать профиль'){
+  if(ctx.message.text === 'Редактировать профиль'){
     ctx.scene.enter(EDIT_SCENE);
   } else if(ctx.message.text === 'Назад'){
     ctx.scene.enter(MAIN_SCENE);

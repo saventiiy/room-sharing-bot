@@ -33,8 +33,8 @@ editScene.on(message('web_app_data'), async (ctx) => {
   const profile: Profile | undefined = ctx.webAppData?.data.json();
   ctx.reply(JSON.stringify(profile, null, 2));
   const hasR = await hasRoom(String(ctx.from.id));
-  if (profile != undefined && 
-    profileSnapshot.lookingFor == LookingFor.Room && profile.lookingFor == LookingFor.Flatmate 
+  if (profile !== undefined && 
+    profileSnapshot.lookingFor === LookingFor.Room && profile.lookingFor === LookingFor.Flatmate 
     && !hasR) {
     ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
   } else {
