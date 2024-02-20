@@ -31,6 +31,11 @@ export enum Districts {
   Zoliborz = 'Zoliborz',
 }
 
+export enum PhotoType {
+  Profile = 'profile',
+  Room = 'room'
+}
+
 export interface Viewed extends BaseDocument {
   id: string;
   viewedIds: string[];
