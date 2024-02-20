@@ -10,9 +10,6 @@ import {
 } from 'firebase/firestore';
 import { LookingFor, Profile, Room, PotentialData, Viewed } from 'types';
 import {
-  getStorage,
-  ref,
-  uploadBytes,
   listAll,
   getDownloadURL,
   getStorage,
@@ -55,8 +52,7 @@ export const getProfile = async (userId: string) => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    const profile = docSnap.data() as Profile;
-    return profile;
+    return docSnap.data() as Profile;
   } else {
     return null;
   }

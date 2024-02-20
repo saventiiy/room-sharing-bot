@@ -29,13 +29,15 @@ editScene.enter((ctx) => {
 });
 
 editScene.on(message('web_app_data'), async (ctx) => {
-  console.log('Got some web_app_data', ctx.webAppData?.data.json());
   const profile: Profile | undefined = ctx.webAppData?.data.json();
+
+  //TODO remove it
+  console.log('Got some web_app_data', ctx.webAppData?.data.json());
   ctx.reply(JSON.stringify(profile, null, 2));
-  const hasR = await hasRoom(String(ctx.from.id));
+
   if (profile !== undefined && 
     profileSnapshot.lookingFor === LookingFor.Room && profile.lookingFor === LookingFor.Flatmate 
-    && !hasR) {
+    && !(await hasRoom(String(ctx.from.id)))) {
     ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
   } else {
     ctx.scene.enter(MAIN_SCENE);

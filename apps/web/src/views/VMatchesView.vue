@@ -10,8 +10,7 @@
 
   onMounted(async () => {
   try {
-    const mathedList = await getMatched(userId.value);
-    for (const match of mathedList) {
+    const mathedList = (await getMatched(userId.value)).map(async (match) => {
       if(match){
         const profilePhotos = await getPhotos(
           match.profile!.id,
@@ -23,7 +22,7 @@
         ); 
       dataList.value.push({ potentialData: { profile: match.profile, room: match.room }, profilePhotos: profilePhotos, roomPhotos: roomPhotos });
       }
-    }
+    });
   } catch (err) {
     console.error(err);
   }
