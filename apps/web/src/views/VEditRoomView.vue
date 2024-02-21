@@ -26,11 +26,13 @@
       } catch (err) {
         console.error(err);
       }
-    });
+    }, 
+    { immediate: true },
+    );
 
   const isValid = computed(() => {
     return !!(
-      files.value.length > 0 &&
+      photos.value.length > 0 &&
       address.value.length > 0 &&
       description.value &&
       description.value.length > 0 &&
