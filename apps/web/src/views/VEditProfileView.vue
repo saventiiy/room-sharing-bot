@@ -46,7 +46,7 @@
 
   const isValid = computed(() => {
     return !!(
-      files.value.length > 0 &&
+      photos.value.length > 0 &&
       name.value.length > 0 &&
       bio.value &&
       bio.value.length > 0 &&
@@ -67,8 +67,8 @@
         name.value !== undefined &&
         gender.value !== undefined &&
         lookingFor.value !== undefined &&
-        files.value !== undefined &&
-        files.value.length !== 0
+        photos.value !== undefined &&
+        photos.value.length !== 0
       ) {
         const profile = await addProfile({
           userId: userId.value,
