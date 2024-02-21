@@ -144,6 +144,9 @@ importers:
 
   packages/types:
     dependencies:
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       firebase:
         specifier: ^10.7.1
         version: 10.7.1
