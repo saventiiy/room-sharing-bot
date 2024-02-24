@@ -15,14 +15,11 @@ const defaultReply = (ctx: Scenes.SceneContext) => {
 };
 
 newRoomOnboardingScene.enter((ctx) => {
-  console.log('Entering newUserOnboardingScene');
   defaultReply(ctx);
 });
 
 newRoomOnboardingScene.on(message('web_app_data'), async (ctx) => {
-  console.log('Got some web_app_data', ctx.webAppData?.data.json());
   const room: Room | undefined = ctx.webAppData?.data.json();
-  ctx.reply(JSON.stringify(room, null, 2));
   ctx.scene.enter(MAIN_SCENE);
 });
 
