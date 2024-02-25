@@ -1,7 +1,9 @@
 {
   "scripts": {
     "dev": "turbo dev",
-    "start": "turbo dev"
+    "build:web": "turbo build --filter=web",
+    "build:bot": "turbo build --filter=bot",
+    "start:bot": "turbo start --filter=bot"
   },
   "devDependencies": {
     "turbo": "^1.11.3"
