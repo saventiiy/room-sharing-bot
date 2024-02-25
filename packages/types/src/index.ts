@@ -33,34 +33,29 @@ export enum Districts {
 
 export enum PhotoType {
   Profile = 'profile',
-  Room = 'room'
+  Room = 'room',
 }
 
-export interface Viewed extends BaseDocument {
-  id: string;
+export class Viewed extends BaseDocument {
   viewedIds: string[];
-}
 
-export class Viewed extends BaseDocument implements Viewed {
   constructor({
-    id, 
+    id,
     viewedIds = [],
     createdAt = getTimestamp(),
-    updatedAt = getTimestamp()
+    updatedAt = getTimestamp(),
   }: {
     id: string;
     createdAt?: Timestamp;
     updatedAt?: Timestamp;
     viewedIds: string[];
-  }){
-    super({ createdAt, updatedAt });
-    this.id = id;
+  }) {
+    super({ createdAt, updatedAt, id });
     this.viewedIds = viewedIds;
   }
 }
 
-export interface Profile extends BaseDocument {
-  id: string;
+export class Profile extends BaseDocument {
   username: string;
   name: string;
   dateofbirth: Timestamp;
@@ -71,9 +66,7 @@ export interface Profile extends BaseDocument {
   searchingPointer: number;
   likes: string[];
   matches: string[];
-}
 
-export class Profile extends BaseDocument implements Profile {
   constructor({
     id,
     createdAt = getTimestamp(),
@@ -103,8 +96,7 @@ export class Profile extends BaseDocument implements Profile {
     likes: string[];
     matches: string[];
   }) {
-    super({ createdAt, updatedAt });
-    this.id = id;
+    super({ createdAt, updatedAt, id });
     this.username = username;
     this.name = name;
     this.dateofbirth = dateofbirth;
@@ -118,17 +110,14 @@ export class Profile extends BaseDocument implements Profile {
   }
 }
 
-export interface Room extends BaseDocument {
-  id: string;
+export class Room extends BaseDocument {
   address: string;
   district: Districts;
   photos: string[];
   description: string;
   price: number;
   likes: string[];
-}
 
-export class Room extends BaseDocument implements Room {
   constructor({
     id,
     createdAt = getTimestamp(),
@@ -150,8 +139,7 @@ export class Room extends BaseDocument implements Room {
     price: number;
     likes: string[];
   }) {
-    super({ createdAt, updatedAt });
-    this.id = id;
+    super({ createdAt, updatedAt, id });
     this.address = address;
     this.district = district;
     this.photos = photos;
@@ -171,5 +159,5 @@ export interface PotentialData {
 export const getAge = (birthDate: Timestamp) => {
   const currentDate = dayjs();
   const bDay = dayjs.unix(birthDate.seconds);
-  return Math.floor(currentDate.diff(bDay, 'year', true));;
+  return Math.floor(currentDate.diff(bDay, 'year', true));
 };
