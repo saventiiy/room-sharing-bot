@@ -1,13 +1,11 @@
 {
   "scripts": {
     "dev": "turbo dev",
-    "start": "turbo dev"
+    "build:web": "turbo build --filter=web",
+    "build:bot": "turbo build --filter=bot",
+    "start:bot": "turbo start --filter=bot"
   },
   "devDependencies": {
     "turbo": "^1.11.3"
-  },
-  "dependencies": {
-    "compressorjs": "^1.2.1",
-    "dayjs": "^1.11.10"
   }
 }
