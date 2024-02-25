@@ -19,15 +19,11 @@ const defaultReply = (ctx: Scenes.SceneContext) => {
 };
 
 newUserOnboardingScene.enter((ctx) => {
-  console.log('Entering newUserOnboardingScene');
   defaultReply(ctx);
 });
 
 newUserOnboardingScene.on(message('web_app_data'), async (ctx) => {
-  console.log('Got some web_app_data', ctx.webAppData?.data.json());
   const profile: Profile | undefined = ctx.webAppData?.data.json();
-  ctx.reply(JSON.stringify(profile, null, 2));
-
   if (profile != undefined && profile.lookingFor === LookingFor.Flatmate) {
     ctx.scene.enter(NEW_ROOM_ONBOARDING_SCENE);
   } else {

@@ -101,6 +101,7 @@
         @change="onFileChanged($event)"
         accept="image/*"
         capture 
+        multiple
         />
       </div>
       <div class="field">

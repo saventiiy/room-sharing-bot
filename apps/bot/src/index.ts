@@ -12,6 +12,8 @@ import {
 import { MAIN_SCENE, mainScene } from './scenes/mainScene';
 import { newRoomOnboardingScene } from './scenes/newRoomOnboardingScene';
 import { EDIT_SCENE, editScene } from './scenes/editScene';
+import * as Sentry from "@sentry/node";
+import { ProfilingIntegration } from "@sentry/profiling-node";
 
 const bot = new Telegraf<Scenes.SceneContext>(process.env.BOT_TOKEN);
 
@@ -27,7 +29,6 @@ bot.use(session());
 bot.use(stage.middleware());
 
 bot.start(async (ctx) => {
-  console.log('Bot started');
   if (await hasProfile(String(ctx.from.id))) {
     ctx.scene.enter(RETURNING_USER_ONBOARDING_SCENE);
   } else {
@@ -36,7 +37,6 @@ bot.start(async (ctx) => {
 });
 
 bot.on('message', (ctx) => {
-  console.log('pong:', ctx.message);
   if(ctx.message.text === 'Редактировать профиль'){
     ctx.scene.enter(EDIT_SCENE);
   } else if(ctx.message.text === 'Назад'){
@@ -47,6 +47,16 @@ bot.on('message', (ctx) => {
 });
 
 bot.launch();
+
+Sentry.init({
+  dsn: "https://f5ea0803ecb508eb33dc675f93cdf571@o4506802556502016.ingest.sentry.io/4506802567249920",
+  integrations: [
+    new ProfilingIntegration(),
+  ],
+  tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0,
+});
+
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));

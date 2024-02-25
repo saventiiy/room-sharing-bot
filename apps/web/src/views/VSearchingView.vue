@@ -44,8 +44,6 @@
   const loadUser = async () => {
     try {
       const potentialData = await getPotentialUser(userId.value);
-      console.log(potentialData);
-
       if (potentialData.profile != undefined && potentialData.room != undefined) {
           isShowProfile.value = false;
 
@@ -73,6 +71,9 @@
           lookingFor.value = potentialData.profile.lookingFor || LookingFor.Room;
           bio.value = potentialData.profile.bio || '';
           
+          isShowProfile.value = true;
+          address.value = '';
+
           likedUserId.value = potentialData.profile.id;
           const profilePhotos = await getPhotos(potentialData.profile.id, PhotoType.Profile);
           photos.value = { profilePhoto: profilePhotos, roomPhoto: [] };
