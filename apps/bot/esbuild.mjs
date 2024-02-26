@@ -5,5 +5,6 @@ await esbuild.build({
   platform: 'node',
   bundle: true,
   outdir: 'dist',
+  keepNames: true,
   external: ['@sentry/profiling-node'],
 });
