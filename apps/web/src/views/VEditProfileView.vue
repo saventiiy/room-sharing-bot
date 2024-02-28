@@ -110,7 +110,7 @@
 <template>
   <section class="hero is-small has-text-centered">
     <div class="hero-body">
-      <p class="title">Измените профиль</p>
+      <p class="title">Редактирование профиля</p>
     </div>
   </section>
   <div class="container is-fluid">
@@ -178,7 +178,7 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Добавьте фотографии профиля</label>
+        <label class="label">Добавьте по одной фотографии профиля</label>
         <input
         type="file"
         @change="onFileChanged($event)"
