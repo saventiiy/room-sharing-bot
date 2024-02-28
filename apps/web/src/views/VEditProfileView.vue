@@ -22,7 +22,6 @@
   const matches = ref<string[]>([]);
   const photos = ref<string[]>([]);
   const files = ref<File[]>([]);
-  const inputRef = ref<HTMLInputElement | null>(null);
 
     watch(
       userId,
@@ -97,8 +96,8 @@
   });
 
   //maybe it could be possible to use only files without photos
-  const onFileChanged = () => {
-    const target = inputRef.value as HTMLInputElement;
+  const onFileChanged = ($event: Event) => {
+    const target = $event.target as HTMLInputElement;
     if (target && target.files) {
       for (let i = 0; i < target.files.length; i++) {
         files.value.push(target.files[i]);
@@ -181,9 +180,10 @@
       <div class="field">
         <label class="label">Добавьте фотографии профиля</label>
         <input
+        class="file_input"
         type="file"
-        ref="inputRef"
-        @change="onFileChanged"
+        @change="onFileChanged($event)"
+        accept="image/*" 
         multiple
         />
       </div>
