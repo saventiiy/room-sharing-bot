@@ -180,11 +180,10 @@
       <div class="field">
         <label class="label">Добавьте фотографии профиля</label>
         <input
-        name="files[]"
-        id="files"
         type="file"
         @change="onFileChanged($event)"
-        accept="image/*" 
+        accept="image/*"
+        capture 
         multiple
         />
       </div>
