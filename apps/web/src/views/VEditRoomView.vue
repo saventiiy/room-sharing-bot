@@ -112,7 +112,6 @@
         <input
         type="file"
         @change="onFileChanged($event)"
-        accept="image/*"
         multiple
         />
       </div>
