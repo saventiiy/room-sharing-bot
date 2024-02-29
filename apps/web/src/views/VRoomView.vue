@@ -69,7 +69,7 @@
 <template>
   <section class="hero is-small has-text-centered">
     <div class="hero-body">
-      <p class="title">Заполните ваш профиль</p>
+      <p class="title">Заполните ваш профиль комнаты</p>
     </div>
   </section>
   <div class="container is-fluid">
@@ -95,12 +95,11 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Добавьте фотографии комнаты</label>
+        <label class="label">Добавьте по одной фотографии комнаты</label>
         <input
         type="file"
         @change="onFileChanged($event)"
         accept="image/*"
-        capture 
         multiple
         />
       </div>
