@@ -113,7 +113,6 @@
         type="file"
         @change="onFileChanged($event)"
         accept="image/*"
-        capture 
         multiple
         />
       </div>
