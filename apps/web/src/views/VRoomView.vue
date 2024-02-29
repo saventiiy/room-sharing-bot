@@ -30,7 +30,7 @@
 
   const mainButtonOptions = computed<MainButtonConfig>(() => ({
     text: address.value,
-    is_active: isValid.value,
+    is_visible: isValid.value,
   }));
 
   useMainButton(mainButtonOptions, async () => {

@@ -58,7 +58,7 @@
 
   const mainButtonOptions = computed<MainButtonConfig>(() => ({
     text: name.value,
-    is_active: isValid.value,
+    is_visible: isValid.value,
   }));
   
   useMainButton(mainButtonOptions, async () => {
