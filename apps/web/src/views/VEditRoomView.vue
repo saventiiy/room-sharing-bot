@@ -108,7 +108,7 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Добавьте по одной фотографии комнаты</label>
+        <label class="label">Добавьте фотографии комнаты (по одной)</label>
         <input
         type="file"
         @change="onFileChanged($event)"
