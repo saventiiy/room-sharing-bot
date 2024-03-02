@@ -43,7 +43,7 @@
 
   const mainButtonOptions = computed<MainButtonConfig>(() => ({
     text: address.value,
-    is_active: isValid.value,
+    is_visible: isValid.value,
   }));
 
   useMainButton(mainButtonOptions, async () => {
@@ -82,7 +82,7 @@
 <template>
   <section class="hero is-small has-text-centered">
     <div class="hero-body">
-      <p class="title">Заполните ваш профиль</p>
+      <p class="title">Редактирование комнаты</p>
     </div>
   </section>
   <div class="container is-fluid">
@@ -108,12 +108,11 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Добавьте фотографии комнаты</label>
+        <label class="label">Добавьте фотографии комнаты (по одной)</label>
         <input
         type="file"
         @change="onFileChanged($event)"
-        accept="image/*"
-        capture 
+        multiple
         />
       </div>
       <div class="field">

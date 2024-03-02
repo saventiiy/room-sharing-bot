@@ -1,6 +1,6 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
-import { LookingFor, Profile, Room } from 'types';
+import { LookingFor, Profile } from 'types';
 import { NEW_ROOM_ONBOARDING_SCENE } from './newRoomOnboardingScene';
 import { MAIN_SCENE } from './mainScene';
 import { editMenu } from '../menus/editMenu';
@@ -24,17 +24,11 @@ const defaultReply = async (ctx: Scenes.SceneContext) => {
 };
 
 editScene.enter((ctx) => {
-  console.log(`Entering ${EDIT_SCENE}`);
   defaultReply(ctx);
 });
 
 editScene.on(message('web_app_data'), async (ctx) => {
   const profile: Profile | undefined = ctx.webAppData?.data.json();
-
-  //TODO remove it
-  console.log('Got some web_app_data', ctx.webAppData?.data.json());
-  ctx.reply(JSON.stringify(profile, null, 2));
-
   if (profile !== undefined && 
     profileSnapshot.lookingFor === LookingFor.Room && profile.lookingFor === LookingFor.Flatmate 
     && !(await hasRoom(String(ctx.from.id)))) {

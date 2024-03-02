@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist",
+    "build": "node esbuild.mjs",
     "start": "node dist/index.js",
     "type:check": "tsc --noEmit",
     "lint:check": "eslint . --ext .ts,.js",
@@ -12,6 +12,8 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
+    "@sentry/node": "^7.102.1",
+    "@sentry/profiling-node": "^7.102.1",
     "dotenv": "^16.3.1",
     "sdk": "workspace:*",
     "telegraf": "^4.15.3",

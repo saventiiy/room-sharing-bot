@@ -1,6 +1,5 @@
 <script lang="ts" setup>
  import { Districts, Gender, LookingFor } from 'types';
- import { ref } from 'vue';
  import VSliderView from './VSliderView.vue';
 
  const props = defineProps({
@@ -15,18 +14,8 @@
   district: Districts,
   price: Number,
   description: String,
+  username: String
  });
-
-  const currentPhotoIndex = ref(0);
-  
-  const nextPhoto = () => {
-    currentPhotoIndex.value = (currentPhotoIndex.value + 1) % props.photos.length;
-  };
-
-  const prevPhoto = () => {
-    currentPhotoIndex.value = (currentPhotoIndex.value - 1 + props.photos.length) % props.photos.length;
-  };
-
 </script>
 
 <template>
@@ -43,6 +32,7 @@
                 <div class="media-content">
                     <p class="title is-4">{{ name }}</p>
                     <p class="subtitle is-6">{{ gender }}, {{ age }} years</p>
+                    <p class="subtitle is-6" v-if="username"> Вы можете написать пользователю <a :href="'https://t.me/' + username">{{ username }}</a></p>
                 </div>
                 </div>
                 <div class="content">

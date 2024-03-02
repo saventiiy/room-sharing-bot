@@ -31,7 +31,7 @@
 
   const mainButtonOptions = computed<MainButtonConfig>(() => ({
     text: name.value,
-    is_active: isValid.value,
+    is_visible: isValid.value,
   }));
 
   const userId = useRouteParams<string>('userId');
@@ -144,12 +144,11 @@
         </div>
       </div>
       <div class="field">
-        <label class="label">Добавьте фотографии профиля</label>
+        <label class="label">Добавьте фотографии профиля(по одной)</label>
         <input
         type="file"
         @change="onFileChanged($event)"
-        accept="image/*"
-        capture 
+        multiple
         />
       </div>
       <div class="field">

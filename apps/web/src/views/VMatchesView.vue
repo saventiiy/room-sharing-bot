@@ -41,6 +41,7 @@
     <div v-for="(data, index) in dataList" :key="index" class="card m-4">
       <div v-if="data.potentialData.profile">
         <VProfileCardView
+          :username="data.potentialData.profile.username"
           :photos="data.profilePhotos"
           :name="data.potentialData.profile.name"
           :gender="data.potentialData.profile.gender"
